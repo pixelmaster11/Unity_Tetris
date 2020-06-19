@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58cdf23c86cc2594e83ae976e441fbed, type: 3}
   m_Name: SO_TetrominoSpawn_Config
   m_EditorClassIdentifier: 
-  TetrominoPrefabs: []
-  TetrominoPoolAmount: 0
-  TetrominoSpritePoolAmount: 0
+  TetrominoPrefabs:
+  - {fileID: 8422804051196479797, guid: 0cbf53e9ce17d9e4a848166c5ca50321, type: 3}
+  - {fileID: 8081064841141194937, guid: fd111bf2bb7b8a14dbcda025733e9cec, type: 3}
+  TetrominoPoolAmount: 4
+  TetrominoSpritePoolAmount: 10
   TetrominoSpawnType: 0

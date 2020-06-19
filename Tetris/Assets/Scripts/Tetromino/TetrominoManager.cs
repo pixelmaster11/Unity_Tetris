@@ -42,7 +42,9 @@ public class TetrominoManager : MonoBehaviour
     /// <returns></returns>
     public SpriteRenderer GetTetrominoSprite(int ID)
     {
-        return tetrominoSpawner.GetTetrominoSprite(ID);
+        SpriteRenderer sr = tetrominoSpawner.GetTetrominoSprite(ID);
+        sr.sortingOrder = 1;
+        return sr;
     }
 
 
@@ -54,7 +56,9 @@ public class TetrominoManager : MonoBehaviour
     /// <returns></returns>
     public SpriteRenderer GetTetrominoSprite(TetrominoType type)
     {
-        return tetrominoSpawner.GetTetrominoSprite(type);
+        SpriteRenderer sr = tetrominoSpawner.GetTetrominoSprite(type);
+        sr.sortingOrder = 1;
+        return sr;
     }
 
 

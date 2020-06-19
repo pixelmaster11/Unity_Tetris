@@ -46,9 +46,6 @@ namespace TetrominoSpawnSystem
             Random.InitState((int)System.DateTime.Now.Ticks);
             int randID = Random.Range(0, prefabs.Count);
 
-
-            Debug.Log(randID);
-
             possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == randID);
 
             if(possible.Count > 0)

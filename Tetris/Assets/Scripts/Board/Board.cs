@@ -43,13 +43,16 @@ public class Board : MonoBehaviour
 
         InitializeBoard();
 
+        
+        
+
     
     }
 
     private void Update()
     {
         GetInputs();
-  
+
     }
     
     private void GetInputs()
