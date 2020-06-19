@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba78d74c5b163349bae83e48c05eed9, type: 3}
+  m_Name: SO_Board
+  m_EditorClassIdentifier: 
+  width: 12
+  height: 18
+  offX: 0.1
+  offY: 0.1
+  backgroundSprite: {fileID: 1928340513124873594, guid: bb0885d4989cc7e48bbce4a22e074a39,
+    type: 3}
+  boundarySprite: {fileID: 1297922847424170149, guid: e695aeb5c7fa5124dab6c67a67d6f028,
+    type: 3}
