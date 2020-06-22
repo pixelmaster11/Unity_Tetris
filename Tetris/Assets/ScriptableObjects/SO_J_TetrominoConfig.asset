@@ -9,18 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd3c44c22d8afee4e99253f7376bf0bc, type: 3}
-  m_Name: SO_T_TetrominoConfig
+  m_Script: {fileID: 11500000, guid: 473e1803230f81f409ad5e3baaf4f445, type: 3}
+  m_Name: SO_J_TetrominoConfig
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 2919790dfc0315e41b29c64dd27bd51b, type: 3}
   ghostSprite: {fileID: 21300000, guid: e7cc6bfb50a7c5b42a44468f55145753, type: 3}
   totalSprites: 4
-  id: 1
-  type: 1
-  tetrominoName: T_Tetromino
+  id: 5
+  type: 5
+  tetrominoName: J_Tetromino
   color:
     serializedVersion: 2
-    rgba: 4278965847
+    rgba: 4278230271
   ghostColor:
     serializedVersion: 2
-    rgba: 4278559761
+    rgba: 4279203791

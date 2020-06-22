@@ -18,6 +18,10 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
     [SerializeField]
     private List<SpriteRenderer> tetrominoSprites;
     
+
+
+
+
    /// <summary>
    /// Function that saves a sprite associated to this tetromino
    /// </summary>
@@ -44,7 +48,7 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
     }
 
     
-
+  
     /// <summary>
     /// Returns the 2D-Matrix from the config file
     /// </summary>
@@ -85,7 +89,7 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
     /// Returns the Sprite graphic from the config file
     /// </summary>
     /// <returns></returns>
-    public Sprite GetTetrominoSprite()
+    public Sprite GetTetrominoOriginalSprite()
     {
         return tetrominoConfig.TetrominoSprite;
     }
@@ -100,9 +104,29 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
         return tetrominoConfig.TetrominoColor;
     }
 
+
+    /// <summary>
+    /// Returns the Ghost Sprite graphic from the config file
+    /// </summary>
+    /// <returns></returns>
+    public Sprite GetGhostSprite()
+    {
+        return tetrominoConfig.GhostSprite;
+    }
+
+
+    /// <summary>
+    /// Returns the Ghost sprite Color from the config file
+    /// </summary>
+    /// <returns></returns>
+    public Color32 GetGhostColor()
+    {
+        return tetrominoConfig.GhostColor;
+    }
+
     public void Move()
     {
-      
+       
     }
 
     public void Rotate()

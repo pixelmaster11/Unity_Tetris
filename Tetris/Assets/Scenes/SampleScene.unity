@@ -153,6 +153,8 @@ MonoBehaviour:
   boardConfig: {fileID: 11400000, guid: e5d4cbd3e273a3d47ade0d5a6873f5c1, type: 2}
   currentPosX: 0
   currentPosY: 0
+  ghostPosX: 0
+  ghostPosY: 0
   tetrominoManager: {fileID: 1176980059}
 --- !u!4 &188098713
 Transform:
@@ -204,7 +206,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

@@ -9,11 +9,11 @@ namespace TetrominoSpawnSystem
 
     public class TetrominoSpawner 
     {
-        
+        //Reference to Tetromino Factory and Sprite Factory
         TetrominoFactory tetrominoFactory;
         TetrominoSpritePool tetrominoSpritePool;
 
-
+        //Set Spawn connfigs
         public TetrominoSpawner(TetrominoSpawnConfig spawnConfig, Transform tetrominoParent, Transform spriteParent)
         {
             switch(spawnConfig.TetrominoSpawnType)
@@ -34,38 +34,48 @@ namespace TetrominoSpawnSystem
         }
 
 
+        /// <summary>
+        /// Create a tetromino and sprite pool
+        /// </summary>
         public void CreatePool()
         {
             tetrominoFactory.CreatePool();
             tetrominoSpritePool.CreatePool();
         }
 
-        private void CreateTetrominoPool()
-        {
-            tetrominoFactory.CreatePool();
-        }
 
-
-        private void CreateTetrominoSpritePool()
-        {
-            tetrominoSpritePool.CreatePool();
-        }
-
-        public Tetromino GetTetromino()
+        /// <summary>
+        /// Return a tetromino from the pool
+        /// </summary>
+        /// <returns></returns>
+       public Tetromino GetTetromino()
         {
             return tetrominoFactory.GetTetromino();
         }
 
-        public SpriteRenderer GetTetrominoSprite(int id)
+        /// <summary>
+        /// Return the tetromino sprite with  given tetromino id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public SpriteRenderer GetTetrominoSprite(int id, bool isGhost = false)
         {
-            return tetrominoSpritePool.GetTetrominoSprite(id);
+            return tetrominoSpritePool.GetTetrominoSprite(id, isGhost);
         }
 
-        public SpriteRenderer GetTetrominoSprite(TetrominoType type)
+        /// <summary>
+        /// Return the tetromino sprite with  given tetromino type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public SpriteRenderer GetTetrominoSprite(TetrominoType type, bool isGhost = false)
         {
-            return tetrominoSpritePool.GetTetrominoSprite(type);
+            return tetrominoSpritePool.GetTetrominoSprite(type, isGhost);
         }
 
+
+        
+     
         
     }
 

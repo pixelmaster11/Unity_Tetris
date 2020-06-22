@@ -17,6 +17,15 @@ namespace Configs.TetrominoSO
         [SerializeField]
         protected Sprite sprite;
 
+        //Sprite associated with ghost
+        [SerializeField]
+        protected Sprite ghostSprite;
+
+        //Total number of sprites associated with this Tetromino
+        //Corresponds to number of 1's in the matrix
+        [SerializeField]
+        protected int totalSprites;
+
         //Tetromino ID
         [SerializeField]
         protected int id;
@@ -33,12 +42,33 @@ namespace Configs.TetrominoSO
         [SerializeField]
         protected Color32 color;
 
+        //Color for Ghost Sprite
+        [SerializeField]
+        protected Color32 ghostColor = Color.white;
 
+       
         public Sprite TetrominoSprite
         {
             get
             {
                 return sprite;
+            }
+        }
+
+        public Sprite GhostSprite
+        {
+            get
+            {
+                return ghostSprite;
+            }
+        }
+
+
+        public int TotalSprites
+        {
+            get
+            {
+                return totalSprites;
             }
         }
 
@@ -63,6 +93,15 @@ namespace Configs.TetrominoSO
             get
             {
                 return color;
+            }
+        }
+
+
+          public Color32 GhostColor
+        {
+            get
+            {
+                return ghostColor;
             }
         }
 

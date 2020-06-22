@@ -17,6 +17,10 @@ public class TetrominoSpritePool
     //Dictionary to Retrieve a tetromino Sprite from the available pool  using the tetromino type
     private Dictionary<TetrominoType, List<SpriteRenderer>> pool = new Dictionary<TetrominoType, List<SpriteRenderer>>();
 
+     //Dictionary to Retrieve a tetromino Sprite from the available pool  using the tetromino type
+    private Dictionary<TetrominoType, List<SpriteRenderer>> ghostPool = new Dictionary<TetrominoType, List<SpriteRenderer>>();
+
+
     //Transform to parent all the pooled sprites
     private Transform poolParent;
 
@@ -41,15 +45,20 @@ public class TetrominoSpritePool
         {
             Tetromino t = tetrominos[k];
             List<SpriteRenderer> srList = new List<SpriteRenderer>();
+            List<SpriteRenderer> ghList = new List<SpriteRenderer>();
 
             for (int i = 0; i < amount; i++)
             {   
                 SpriteRenderer sr = CreateSprite(k);
                 srList.Add(sr);
 
+                SpriteRenderer gh_sr = CreateGhostSprite(k);
+                ghList.Add(gh_sr);
+
             }
 
             pool.Add(t.GetTetrominoType(), srList);
+            ghostPool.Add(t.GetTetrominoType(), ghList);
         }
         
     }
@@ -59,17 +68,26 @@ public class TetrominoSpritePool
     /// </summary>
     /// <param name="ID">Tetromino ID</param>
     /// <returns></returns>
-    public SpriteRenderer GetTetrominoSprite(int ID)
+    public SpriteRenderer GetTetrominoSprite(int ID, bool ghost = false)
     {
-         List<SpriteRenderer> srList; 
-         
-
+        List<SpriteRenderer> srList;   
         TetrominoType type = (TetrominoType) ID;
 
-         if(!pool.TryGetValue(type, out srList))
-         {
-             throw new KeyNotFoundException();
-         }
+        if(ghost)
+        {
+            if(!ghostPool.TryGetValue(type, out srList))
+            {
+                throw new KeyNotFoundException();
+            }
+        }
+
+        else
+        {
+            if(!pool.TryGetValue(type, out srList))
+            {
+                throw new KeyNotFoundException();
+            }
+        }
 
 
         for(int i = 0; i < srList.Count; i++)
@@ -81,10 +99,20 @@ public class TetrominoSpritePool
             }
         }
 
-        SpriteRenderer sr = CreateSprite(ID);
-        srList.Add(sr);
+        if(ghost)
+        {
+            SpriteRenderer gh_sr = CreateGhostSprite(ID);
+            srList.Add(gh_sr);
+            return gh_sr;
+        }
 
-        return sr;
+        else
+        {
+            SpriteRenderer sr = CreateSprite(ID);
+            srList.Add(sr);
+            return sr;
+        }
+        
     }
 
     /// <summary>
@@ -92,17 +120,26 @@ public class TetrominoSpritePool
     /// </summary>
     /// <param name="type">Tetromino type</param>
     /// <returns></returns>
-    public SpriteRenderer GetTetrominoSprite(TetrominoType type)
+    public SpriteRenderer GetTetrominoSprite(TetrominoType type, bool ghost = false)
     {
          List<SpriteRenderer> srList; 
-         
-
          int ID = (int) type;
 
-         if(!pool.TryGetValue(type, out srList))
-         {
-             throw new KeyNotFoundException();
-         }
+        if(ghost)
+        {
+            if(!ghostPool.TryGetValue(type, out srList))
+            {
+                throw new KeyNotFoundException();
+            }
+        }
+
+        else
+        {
+            if(!pool.TryGetValue(type, out srList))
+            {
+                throw new KeyNotFoundException();
+            }
+        }
 
 
         for(int i = 0; i < srList.Count; i++)
@@ -114,9 +151,19 @@ public class TetrominoSpritePool
             }
         }
        
-       SpriteRenderer sr = CreateSprite(ID);
-       srList.Add(sr);
-       return sr;
+        if(ghost)
+        {
+            SpriteRenderer gh_sr = CreateGhostSprite(ID);
+            srList.Add(gh_sr);
+            return gh_sr;
+        }
+
+        else
+        {
+            SpriteRenderer sr = CreateSprite(ID);
+            srList.Add(sr);
+            return sr;
+        }
 
     }
 
@@ -130,8 +177,25 @@ public class TetrominoSpritePool
     {
         GameObject go = new GameObject(tetrominos[ID].GetTetrominoName());
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = tetrominos[ID].GetTetrominoSprite();
+        sr.sprite = tetrominos[ID].GetTetrominoOriginalSprite();
         sr.color = tetrominos[ID].GetTetrominoColor();
+        sr.gameObject.SetActive(false);
+        sr.transform.parent = poolParent;
+        return sr;
+    }
+
+
+    /// <summary>
+    /// Creates a Ghost sprite from the given Tetromino ID
+    /// </summary>
+    /// <param name="ID">Tetromino ID</param>
+    /// <returns></returns>
+    private SpriteRenderer CreateGhostSprite(int ID)
+    {
+        GameObject go = new GameObject(tetrominos[ID].GetTetrominoName());
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = tetrominos[ID].GetGhostSprite();
+        sr.color = tetrominos[ID].GetGhostColor();
         sr.gameObject.SetActive(false);
         sr.transform.parent = poolParent;
         return sr;

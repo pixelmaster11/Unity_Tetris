@@ -19,10 +19,15 @@ public class Board : MonoBehaviour
     // Initialize to topmost row mid column 
     int currentPosX = 0; 
 
-
     [SerializeField]
     // Initialize to topmost row
     int currentPosY = 0; 
+
+    [SerializeField]
+    int ghostPosX  = 0;
+
+    [SerializeField]
+    int ghostPosY = 0;
 
     int [,] currPiece;
 
@@ -30,6 +35,8 @@ public class Board : MonoBehaviour
     TetrominoManager tetrominoManager;
 
     Tetromino T;
+
+
 
     private void Start()
     {
@@ -42,17 +49,13 @@ public class Board : MonoBehaviour
         tetrominoManager.CreatePool();
 
         InitializeBoard();
-
-        
-        
-
-    
+  
     }
 
     private void Update()
     {
         GetInputs();
-
+        
     }
     
     private void GetInputs()
@@ -61,12 +64,13 @@ public class Board : MonoBehaviour
         //Move Left
         if (Input.GetKeyDown(KeyCode.A))
         {
-            if (Move(-1, 0))
+            if (CanMove(-1, 0))
             {
                 currentPosX -= 1;
 
                 DisplayBoard();
-                DisplayPiece();
+                DisplayPiece(currentPosX, currentPosY);
+                Ghost();
             }
 
         }
@@ -76,12 +80,13 @@ public class Board : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
 
-            if (Move(1, 0))
+            if (CanMove(1, 0))
             {
                 currentPosX += 1;
 
                 DisplayBoard();
-                DisplayPiece();
+                DisplayPiece(currentPosX, currentPosY);
+                Ghost();
             }
 
         }
@@ -92,16 +97,57 @@ public class Board : MonoBehaviour
         {
            
 
-            if (Move(0, -1))
+            if (CanMove(0, -1))
             {
                 currentPosY -= 1;
 
                 DisplayBoard();
-                DisplayPiece();
+                DisplayPiece(currentPosX, currentPosY);
+                Ghost();
             }
 
 
         }
+
+
+
+         //Rotate Piece AC
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+
+            if (CanRotate(1))
+            {
+
+                DisplayBoard();
+                DisplayPiece(currentPosX, currentPosY);
+                 Ghost();
+            }
+
+
+        }
+
+
+        //Rotate Piece CC
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+
+            if (CanRotate(-1))
+            {
+                DisplayBoard();
+                DisplayPiece(currentPosX, currentPosY);
+                Ghost();
+
+            }
+
+
+        }
+
+        if(Input.GetKeyDown(KeyCode.W))
+        {   
+            DisplayBoard();
+            SnapToGhost();
+        }
+
 
     }
 
@@ -139,15 +185,17 @@ public class Board : MonoBehaviour
 
        
         //Middle column of the board
-        currentPosX = width / 2 - 1;
+        currentPosX = 0;//width / 2 - 1;
 
         //Topmost row of the board
         currentPosY = height / 2 + 1;
 
         //T = new Tetromino(1);
         T = tetrominoManager.GetTetromino();
+        currPiece = T.GetTetrominoMatrix(); 
 
-        DisplayPiece();
+        DisplayPiece(currentPosX, currentPosY);
+        Ghost();
 
     }
 
@@ -200,10 +248,9 @@ public class Board : MonoBehaviour
 
 
     //Displays or locks pieces on board
-    private void DisplayPiece()
+    private void DisplayPiece(int currPosX, int currPosY, bool isGhost = false)
     {
-        currPiece = T.GetTetrominoMatrix(); //tetrominoManager.GetTetrominoMatrix(T.tetrominoConfig.ID);
-
+        
     
       //GEtLength(0) = Rows / Height
         for (int x = 0; x < currPiece.GetLength(1); x++)
@@ -213,8 +260,8 @@ public class Board : MonoBehaviour
                     
                     //Piece position on board
                     //TUT: EXPLAIN THIS
-                    int boardX = x + currentPosX ; //+ currentPosY;
-                    int boardY = y + currentPosY; //+ currentPosX;
+                    int boardX = x + currPosX;//currentPosX; 
+                    int boardY = y + currPosY; //currentPosY; 
 
                 //Check if inside boundaries, otherwise don't do anything
                 //TUT: EXPLAIN WHAT HAPPENS IF OUTSIDE BOUNDARY
@@ -233,9 +280,12 @@ public class Board : MonoBehaviour
                                                      
                                 //Display only piece graphic                       
                                 //graphicalBoard[pieceOnBoardX, pieceOnBoardY].color = tetrominos[randomPieceID].tetrominoColor;
-                              
-                               //Get the sprite associated with current Tetromino piece
-                                SpriteRenderer currPieceSprite = tetrominoManager.GetTetrominoSprite(T.GetTetrominoID());
+
+                                SpriteRenderer currPieceSprite;
+
+                               
+                                //Get the sprite associated with current Tetromino piece
+                                currPieceSprite = tetrominoManager.GetTetrominoSprite(T.GetTetrominoID(), isGhost);
 
                                 
                                 currPieceSprite.gameObject.transform.position = new Vector2(boardX + boardX * boardConfig.offX,
@@ -246,10 +296,11 @@ public class Board : MonoBehaviour
                                 currPieceSprite.transform.parent = T.transform;
 
                                 //TODO: Add the sprites ones a piece is locked
-                                //T.tetrominoSprites.Add(currPieceSprite);
-
                                 graphicalBoard[boardX, boardY] = currPieceSprite;
-                                
+
+                               
+                    
+                                                          
                                 
                             }
 
@@ -265,7 +316,7 @@ public class Board : MonoBehaviour
 
     
     //Can we fit our piece after doing the next move 
-    private bool Move(int xDir, int yDir)
+    private bool CanMove(int xDir, int yDir)
     {
         //next piece positions to be performed
         int nextPosX = currentPosX + xDir;
@@ -291,6 +342,9 @@ public class Board : MonoBehaviour
                         {
                             return false;
                         }
+
+
+                   
                     }
                 }
 
@@ -299,5 +353,151 @@ public class Board : MonoBehaviour
 
         return true;
     }
+
+
+    private void SnapToGhost()
+    {   
+
+        currentPosX = ghostPosX;
+        currentPosY = ghostPosY;
+        DisplayPiece(ghostPosX, ghostPosY);
+        //TODO: Lock Piece after snap
+    }
+
+     //DisplayGhost Piece
+    private void Ghost()
+    {      
+        int rd = 1;
+        while(CanMove(0, -rd))
+        {        
+            rd ++;        
+        }
+
+        if(rd > 1)
+        {
+            ghostPosX = currentPosX;
+            ghostPosY = currentPosY + 1 - rd;
+            DisplayPiece(ghostPosX, ghostPosY, true);
+        }
+       
+              
+    }
+
+
+
+   //Can we fit our piece after rotating?
+    private bool CanRotate(int rotDirection)
+    {   
+        
+
+        //Rotate the piece
+        int [,] rotatedPiece = Rotate(currPiece, rotDirection);
+
+        //Check if rotated piece can fit on board
+        for (int x = 0; x < rotatedPiece.GetLength(0); x++)
+        {
+            for (int y = 0; y < rotatedPiece.GetLength(1); y++)
+            {
+                int pieceOnBoardX = x + currentPosX;
+                int pieceOnBoardY = y + currentPosY;
+
+                //If inside boundary
+                if (pieceOnBoardX >= 0 && pieceOnBoardX < width)
+                {
+                    if (pieceOnBoardY >= 0 && pieceOnBoardY < height)
+                    {
+                        //Cannot fit
+                        //If it is a sprite in the tetromino matrix and the board is not empty (Either other sprites or boundary is present)
+                        if (rotatedPiece[y, x] == 1 && logicalBoard[pieceOnBoardX, pieceOnBoardY] != 100)
+                        {
+                            
+                            return false;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        //Piece can fit succesfully
+        //Assign current piece as rotated piece
+        currPiece = rotatedPiece;
+        return true;
+    }
+
+
+    //Rotate by 90 deg in CC and AC
+    private int[,] Rotate (int[,] piece, int direction)
+    {
+      
+        int dim = piece.GetLength(0);
+       
+        //TUT: EXPLAIN ROTATION
+        int[,] npiece = new int[dim, dim];
+
+
+        for (int i = 0; i < dim; i++)
+        {
+            for (int j = 0; j < dim; j++)
+            {
+                if (direction == 1)
+                {
+                   npiece[i, j] = piece[dim - 1 - j, i];
+              
+                }
+                   
+                else
+                {
+                    npiece[i, j] = piece[j, dim - 1 - i];  
+               
+                }
+                    
+            }
+
+        }
+
+
+        return npiece;
+    }
+    
+    //Make pieces fall automatically
+   /* private void AutoFall()
+    {
+        /*if(piecesLocked % 10 == 0)
+        {
+           // fallGap -= 0.2f;
+        }
+
+        //Wait for desired time
+        if (timer <= fallGap)
+        {
+            //TUT: EXPLAIN TIME.DELTA TIME IMPORTANCE
+            timer += Time.deltaTime;
+        }
+
+        else
+        {
+            //check if piece can fit one step down
+            //TUT: ISLOCKED IMPORTANCE
+            //PIECES NEED TO AUTOFALL ONLY IF THEY ARE NOT LOCKED
+            //MAINLY FOR DEBUGGING PURPOSES
+            if (CheckCanFitNextMove(0, -1) && !isLocked)
+            {
+                currentPosY -= 1;
+              
+            }
+
+            //If it cannot stop and lock the piece on board
+            else
+            {
+                if(!isDebug)
+                StopAutoFall();
+            }
+
+            timer = 0;
+        }
+
+    }*/
+
 
 }
