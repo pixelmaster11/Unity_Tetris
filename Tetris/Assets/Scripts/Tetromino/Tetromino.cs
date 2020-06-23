@@ -16,7 +16,7 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
 
     //List to store associated sprites with this tetromino
     [SerializeField]
-    private List<SpriteRenderer> tetrominoSprites;
+    public List<SpriteRenderer> tetrominoSprites;
     
 
 
@@ -44,6 +44,14 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
         if(tetrominoSprites.Count > 0)
         {
             tetrominoSprites.Remove(sr);
+        }
+    }
+
+    public void RemoveAllSprites()
+    {
+        if(tetrominoSprites.Count > 0)
+        {
+            tetrominoSprites.Clear();
         }
     }
 

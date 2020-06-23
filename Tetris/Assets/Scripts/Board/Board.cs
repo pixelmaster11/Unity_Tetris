@@ -36,7 +36,7 @@ public class Board : MonoBehaviour
 
     Tetromino T;
 
-
+    float timer;
 
     private void Start()
     {
@@ -53,8 +53,12 @@ public class Board : MonoBehaviour
     }
 
     private void Update()
-    {
+    {   
+
+        AutoFall();
         GetInputs();
+
+
         
     }
     
@@ -68,9 +72,10 @@ public class Board : MonoBehaviour
             {
                 currentPosX -= 1;
 
-                DisplayBoard();
-                DisplayPiece(currentPosX, currentPosY);
-                Ghost();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();
+                Move();
             }
 
         }
@@ -84,9 +89,10 @@ public class Board : MonoBehaviour
             {
                 currentPosX += 1;
 
-                DisplayBoard();
-                DisplayPiece(currentPosX, currentPosY);
-                Ghost();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();
+                Move();
             }
 
         }
@@ -101,10 +107,12 @@ public class Board : MonoBehaviour
             {
                 currentPosY -= 1;
 
-                DisplayBoard();
-                DisplayPiece(currentPosX, currentPosY);
-                Ghost();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();
+                Move();
             }
+
 
 
         }
@@ -118,9 +126,10 @@ public class Board : MonoBehaviour
             if (CanRotate(1))
             {
 
-                DisplayBoard();
-                DisplayPiece(currentPosX, currentPosY);
-                 Ghost();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();
+                Move();
             }
 
 
@@ -133,9 +142,10 @@ public class Board : MonoBehaviour
 
             if (CanRotate(-1))
             {
-                DisplayBoard();
-                DisplayPiece(currentPosX, currentPosY);
-                Ghost();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();
+                Move();
 
             }
 
@@ -182,20 +192,41 @@ public class Board : MonoBehaviour
             }
         }
 
+    
+        GetTetromino();
+ 
+    }
 
-       
-        //Middle column of the board
-        currentPosX = 0;//width / 2 - 1;
+
+    //Disables the tetromino sprite or ghost sprite 
+    //And sends it back to the pool
+    private void DisableTetrominoSprite(SpriteRenderer sr)
+    {
+        tetrominoManager.DisableTetrominoSprite(sr);
+    }
+
+    //Disables the active tetromino
+    private void DisableTetromino()
+    {
+       tetrominoManager.DisableTetromino(T);
+
+    }
+
+    //Gets the tetromino from pool
+    private void GetTetromino()
+    {
+         //Middle column of the board
+        currentPosX = width / 2 - 1;
 
         //Topmost row of the board
-        currentPosY = height / 2 + 1;
+        currentPosY = height - 1;
 
-        //T = new Tetromino(1);
         T = tetrominoManager.GetTetromino();
         currPiece = T.GetTetrominoMatrix(); 
 
         DisplayPiece(currentPosX, currentPosY);
         Ghost();
+        removing = false;
 
     }
 
@@ -212,13 +243,13 @@ public class Board : MonoBehaviour
             {
                
                 //Tetromino
-                if (logicalBoard[x, y] != 100 && logicalBoard[x,y] != 9)
+                /*if (logicalBoard[x, y] != 100 && logicalBoard[x,y] != 9)
                 {                                  
                     //graphicalBoard[x, y] = tetrominoManager.GetTetrominoSprite(logicalBoard[x,y]);
                     /*if(graphicalBoard[x, y] != null && !graphicalBoard[x,y].gameObject.activeInHierarchy)
                     {
                         graphicalBoard[x,y].gameObject.SetActive(true);
-                    }*/ 
+                    } 
                     
                 }
 
@@ -226,16 +257,24 @@ public class Board : MonoBehaviour
                 else if (logicalBoard[x, y] == 9)
                 {
                     //graphicalBoard[x, y].color = boundaryColor;
-                }
+                }*/
 
                 //Empty Space and to disable previous tetromino sprites before tetromino is locked
-                else if (logicalBoard[x, y] == 100)
-                {  
-                    //If there is a tetromino sprite and it is not locked. Remove it
+                if (logicalBoard[x, y] == 100)
+                {   
+                
+                    //If there is a tetromino sprite or ghost sprite and it is not locked. Remove it
                     if(graphicalBoard[x, y] != null && graphicalBoard[x,y].gameObject.activeInHierarchy)
-                    {
-                        graphicalBoard[x, y].gameObject.SetActive(false);
+                    {   
+                        
+                        SpriteRenderer sr = graphicalBoard[x, y];
+                        //graphicalBoard[x, y].gameObject.SetActive(false);
+                        //graphicalBoard[x, y].transform.parent = this.transform;
                         graphicalBoard[x,y] = null;
+                        DisableTetrominoSprite(sr);
+
+                     
+                        
                     }                  
                     
                 }
@@ -294,8 +333,9 @@ public class Board : MonoBehaviour
                                 currPieceSprite.gameObject.SetActive(true);
 
                                 currPieceSprite.transform.parent = T.transform;
+                                
+                                T.SetSprite(currPieceSprite);
 
-                                //TODO: Add the sprites ones a piece is locked
                                 graphicalBoard[boardX, boardY] = currPieceSprite;
 
                                
@@ -314,6 +354,23 @@ public class Board : MonoBehaviour
     }
 
 
+    /*private void Move(int xDir, int yDir)
+    {
+        foreach(SpriteRenderer sr in T.tetrominoSprites)
+        {
+           sr.transform.position += new Vector3(xDir + (xDir * boardConfig.offY), yDir + (yDir * boardConfig.offY), 0);
+        }
+
+
+    }*/
+
+    
+    private void Move()
+    {
+        DisplayBoard();
+        DisplayPiece(currentPosX, currentPosY);
+        Ghost();
+    }
     
     //Can we fit our piece after doing the next move 
     private bool CanMove(int xDir, int yDir)
@@ -355,16 +412,22 @@ public class Board : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Snap the tetromino to its ghost
+    /// </summary>
     private void SnapToGhost()
     {   
 
         currentPosX = ghostPosX;
         currentPosY = ghostPosY;
         DisplayPiece(ghostPosX, ghostPosY);
-        //TODO: Lock Piece after snap
+  
+        //TODO: Option to lock immidiately or give 1 extra move
+        LockPiece();
+        
     }
 
-     //DisplayGhost Piece
+    //DisplayGhost Piece
     private void Ghost()
     {      
         int rd = 1;
@@ -460,16 +523,20 @@ public class Board : MonoBehaviour
         return npiece;
     }
     
+    bool removing = false;
     //Make pieces fall automatically
-   /* private void AutoFall()
+    private void AutoFall()
     {
         /*if(piecesLocked % 10 == 0)
         {
            // fallGap -= 0.2f;
-        }
+        }*/
+
+        if(removing)
+        return;
 
         //Wait for desired time
-        if (timer <= fallGap)
+        if (timer <= 0.5f)
         {
             //TUT: EXPLAIN TIME.DELTA TIME IMPORTANCE
             timer += Time.deltaTime;
@@ -478,26 +545,153 @@ public class Board : MonoBehaviour
         else
         {
             //check if piece can fit one step down
-            //TUT: ISLOCKED IMPORTANCE
             //PIECES NEED TO AUTOFALL ONLY IF THEY ARE NOT LOCKED
             //MAINLY FOR DEBUGGING PURPOSES
-            if (CheckCanFitNextMove(0, -1) && !isLocked)
+            if (CanMove(0, -1) )//&& !isLocked)
             {
                 currentPosY -= 1;
-              
+                Move();
+                //DisplayBoard();
+                //DisplayPiece(currentPosX, currentPosY);
+                //Ghost();             
             }
 
             //If it cannot stop and lock the piece on board
             else
-            {
-                if(!isDebug)
-                StopAutoFall();
+            {           
+                LockPiece(); 
+                         
             }
 
             timer = 0;
         }
 
-    }*/
+    }
+
+
+    private void LockPiece()
+    {
+        removing = true;
+        //TUT : y -> Y-axis, x -> X-axis
+        for (int x = 0; x < currPiece.GetLength(1); x++)
+        {
+            for (int y = 0; y < currPiece.GetLength(0); y++)
+            {
+                //Piece position on board
+                //TUT: EXPLAIN THIS
+                int boardX = x + currentPosX;
+                int boardY = y + currentPosY;
+
+                //Check if inside boundaries, otherwise don't do anything
+                //TUT: EXPLAIN WHAT HAPPENS IF OUTSIDE BOUNDARY
+                //wE SIMPLY DO NOT CARE
+                if (boardX >= 0 && boardX < width)
+                {
+                    if (boardY >= 0 && boardY < height)
+                    {
+                        //If its a tetromino position from tetromino matrix
+                        if (currPiece[y, x] == 1)
+                        {
+                            //Lock the piece logically                          
+                           //isLocked = true;
+                          
+                           logicalBoard[boardX, boardY] = T.GetTetrominoID(); 
+
+                            //After locking the tetromino, its sprites becomes part of the board
+                           if(graphicalBoard[boardX, boardY] != null)  
+                                graphicalBoard[boardX, boardY].transform.parent = this.transform;         
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+        CheckLineCompletion();
+        DisableTetromino();
+        GetTetromino(); 
+    }
+
+
+    private void DecreaseLine(int y) 
+    {
+        for (int x = 1; x < width - 1; x++) 
+        {
+            
+            // Move one towards bottom
+            logicalBoard[x, y-1] = logicalBoard[x, y];
+            graphicalBoard[x, y-1] = graphicalBoard[x , y];
+
+            graphicalBoard[x, y] = null;
+
+            // Update Block position
+            if(graphicalBoard[x , y - 1] != null)
+            {
+                graphicalBoard[x, y-1].transform.position += new Vector3(0, - (1 + boardConfig.offY), 0);
+            }
+            
+            
+            
+        }
+    }
+
+
+
+    private void DecreaseLinesAboveOf(int y) 
+    {
+        for (int i = y; i < height; ++i)
+            DecreaseLine(i);
+    }
+
+
+    private void RemoveLineAt(int y) 
+    {
+        for (int x = 1; x < width - 1; x++) 
+        {
+            logicalBoard[x, y] = 100;
+            graphicalBoard[x,y].gameObject.SetActive(false);
+            graphicalBoard[x, y] = null;
+        }
+
+        //DisplayBoard();
+    }
+
+    private bool IsLineCompleteAt(int y)
+    {
+        for (int x = 1; x < width - 1; x++)
+        {
+            if (logicalBoard[x, y] == 100)
+            {
+                 return false;
+            }
+               
+        }
+            
+        return true;
+    }
+
+    private void CheckLineCompletion() 
+    {
+        
+        for (int y = 1; y < height; y++) 
+        {
+            if (IsLineCompleteAt(y)) 
+            {   
+                
+                RemoveLineAt(y);
+                DecreaseLinesAboveOf(y+1);
+                y--;
+            }
+        }
+        
+        
+        
+    }
+
+
+
 
 
 }

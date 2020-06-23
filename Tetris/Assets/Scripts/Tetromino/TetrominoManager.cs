@@ -74,6 +74,21 @@ public class TetrominoManager : MonoBehaviour
         return T;
     }
 
+
+    public void DisableTetromino(Tetromino T)
+    {
+        
+        T.RemoveAllSprites();
+        T.gameObject.SetActive(false);
+        T.transform.parent = tetrominoPoolParent;
+    }
+
+    public void DisableTetrominoSprite(SpriteRenderer sr)
+    {
+        sr.gameObject.SetActive(false);
+        sr.transform.parent = tetrominoSpritePoolParent;
+    }
+
  
 
 }
