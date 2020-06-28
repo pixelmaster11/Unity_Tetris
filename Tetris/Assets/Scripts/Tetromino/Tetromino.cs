@@ -16,10 +16,10 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
 
     //List to store associated sprites with this tetromino
     [SerializeField]
-    public List<SpriteRenderer> tetrominoSprites;
+    private List<SpriteRenderer> tetrominoSprites;
     
 
-
+    
 
 
    /// <summary>

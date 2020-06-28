@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Board : MonoBehaviour
+public class Board : Updateable
 {
     
    [SerializeField]
@@ -38,6 +38,22 @@ public class Board : MonoBehaviour
 
     float timer;
 
+
+    private void OnEnable()
+    { 
+        EventManager.MoveEvent += MoveIssued;
+        EventManager.RotateEvent += RotateIssued;
+        EventManager.SnapEvent += SnapIssued;
+    }
+
+    private void OnDisable()
+    {
+      
+        EventManager.MoveEvent -= MoveIssued;
+        EventManager.RotateEvent -= RotateIssued;
+        EventManager.SnapEvent -= SnapIssued;
+    }
+
     private void Start()
     {
         width = boardConfig.width;
@@ -49,20 +65,46 @@ public class Board : MonoBehaviour
         tetrominoManager.CreatePool();
 
         InitializeBoard();
-  
-    }
-
-    private void Update()
-    {   
-
-        AutoFall();
-        GetInputs();
-
-
         
     }
+
+    public override void Tick()
+    {
+       AutoFall();
+    }
+
+
+    private void MoveIssued(int x, int y)
+    {   
+        //print((currentPosX + x , currentPosY + y));
+        if(CanMove(x, y))
+        {
+            currentPosX += x;
+            currentPosY += y;
+
+            Move();
+        }
+
+    }
+
+
+    private void RotateIssued(int dir)
+    {
+        if(CanRotate(dir))
+        {
+            Move();
+        }
+    }
+
+
+    private void SnapIssued()
+    {
+        DisplayBoard();
+        SnapToGhost();
+    }
     
-    private void GetInputs()
+    
+    /*private void GetInputs()
     {
 
         //Move Left
@@ -159,7 +201,7 @@ public class Board : MonoBehaviour
         }
 
 
-    }
+    }*/
 
 
    
@@ -219,7 +261,7 @@ public class Board : MonoBehaviour
         currentPosX = width / 2 - 1;
 
         //Topmost row of the board
-        currentPosY = height - 1;
+        currentPosY = height - 3;
 
         T = tetrominoManager.GetTetromino();
         currPiece = T.GetTetrominoMatrix(); 
@@ -354,16 +396,7 @@ public class Board : MonoBehaviour
     }
 
 
-    /*private void Move(int xDir, int yDir)
-    {
-        foreach(SpriteRenderer sr in T.tetrominoSprites)
-        {
-           sr.transform.position += new Vector3(xDir + (xDir * boardConfig.offY), yDir + (yDir * boardConfig.offY), 0);
-        }
-
-
-    }*/
-
+   
     
     private void Move()
     {
@@ -407,6 +440,7 @@ public class Board : MonoBehaviour
 
             }
         }
+
 
         return true;
     }
@@ -563,6 +597,7 @@ public class Board : MonoBehaviour
                          
             }
 
+            //MoveIssued(0, - 1);
             timer = 0;
         }
 
@@ -690,8 +725,5 @@ public class Board : MonoBehaviour
         
     }
 
-
-
-
-
+    
 }
