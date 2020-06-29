@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd3c44c22d8afee4e99253f7376bf0bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 348893bc8673f3344af16bd96c78d54f, type: 3}
   m_Name: SO_T_TetrominoConfig
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 2919790dfc0315e41b29c64dd27bd51b, type: 3}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enums;
 
-namespace Configs.TetrominoSO
+namespace Configs
 {
 
     /// <summary>
@@ -11,7 +11,7 @@ namespace Configs.TetrominoSO
     /// The reason for this SO is that this data will be shared by all instances including the inherited tetromino matrix thus saving lot of memory.
     /// This is a type of Flyweight pattern where this tetromino data will be shared by as many Tetromino instances.
     /// </summary>
-    public abstract class TetrominoConfig : ScriptableObject
+    public abstract class TetrominoConfig : BaseConfig
     {
         //Sprite associated with the Tetromino
         [SerializeField]

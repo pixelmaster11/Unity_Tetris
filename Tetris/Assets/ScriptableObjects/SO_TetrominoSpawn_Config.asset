@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58cdf23c86cc2594e83ae976e441fbed, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a68297c49873c84ba1caf9cb897a01f, type: 3}
   m_Name: SO_TetrominoSpawn_Config
   m_EditorClassIdentifier: 
   TetrominoPrefabs:

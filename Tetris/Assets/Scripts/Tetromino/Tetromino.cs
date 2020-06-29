@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enums;
-using Configs.TetrominoSO;
+using Configs;
 
 /// <summary>
 /// Base Tetromino class
@@ -18,9 +18,6 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
     [SerializeField]
     private List<SpriteRenderer> tetrominoSprites;
     
-
-    
-
 
    /// <summary>
    /// Function that saves a sprite associated to this tetromino

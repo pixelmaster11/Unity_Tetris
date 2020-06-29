@@ -1,29 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Configs;
+using Enums;
 
 public class GamePlayManager : MonoBehaviour
 {
    
+    Board board;
+    TetrominoManager tetrominoManager;
+    InputManager inputManager;
+    BoardStateController boardStateController;
 
     [SerializeField]
-    List<Updateable> updateables;
+    private ConfigsReferences configsReferences;
 
-    private void Awake()
+ 
+
+    private void Start()
     {
-        
-      
+        Initialize();
+    }
+
+    void Initialize()
+    {
+        board = new Board(configsReferences.GetConfig(ConfigType.Board));
+        tetrominoManager = new TetrominoManager(configsReferences.GetConfig(ConfigType.TetrominoSpawn));
+        inputManager = new InputManager(configsReferences.GetConfig(ConfigType.KeyboardInput));
+
+        boardStateController = new BoardStateController(board, tetrominoManager, BoardStateType.InitState);
+
+          
     }
 
 
-    private void Update()
-    {   
-        for(int i = 0; i < updateables.Count; i++)
-        {
-            if(updateables[i] != null)
-            {
-                updateables[i].Tick();
-            }
-        }
+    void Update()
+    {
+        inputManager.GetInputs();
+        boardStateController.StateUpdate();
     }
+
 }

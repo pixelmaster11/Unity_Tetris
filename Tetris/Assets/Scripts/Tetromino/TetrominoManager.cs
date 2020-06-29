@@ -3,34 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enums;
 using TetrominoSpawnSystem;
-using Configs.TetrominoSO.SpawnSO;
+using Configs;
 
 /// <summary>
 /// Manager class used to communicate between Board and Tetromino Sprite Pool
 /// </summary>
-public class TetrominoManager : MonoBehaviour
+public class TetrominoManager : Configurable
 {
     //Reference to tetromino spawner
     TetrominoSpawner tetrominoSpawner;
-
-    //Spawn configuraion Scriptable Object
-    [SerializeField]
-    private TetrominoSpawnConfig spawnConfig;
-    
+ 
     //Transforms for cleaning up heirarchy
-    [SerializeField]
     private Transform tetrominoPoolParent;
-
-    [SerializeField]
     private Transform tetrominoSpritePoolParent;
 
+    private TetrominoSpawnConfig spawnConfig;
+
+
+    public TetrominoManager(BaseConfig _config) : base (_config)
+    {
+        spawnConfig = (TetrominoSpawnConfig) _config;
+        tetrominoPoolParent = new GameObject("TetrominoPool").transform;
+        tetrominoSpritePoolParent = new GameObject("TetrominoSpritePool").transform;
+        tetrominoSpawner = new TetrominoSpawner(spawnConfig, tetrominoPoolParent, tetrominoSpritePoolParent);
+        
+        CreatePool();
+    }
 
     /// <summary>
     /// This function calls the the create pool function to create a tetromino pool
     /// </summary>
     public void CreatePool()
     {
-        tetrominoSpawner = new TetrominoSpawner(spawnConfig, tetrominoPoolParent, tetrominoSpritePoolParent);
+    
+        
         tetrominoSpawner.CreatePool();
     
     }
@@ -77,10 +83,13 @@ public class TetrominoManager : MonoBehaviour
 
     public void DisableTetromino(Tetromino T)
     {
+        if(T != null)
+        {
+            T.RemoveAllSprites();
+            T.gameObject.SetActive(false);
+            T.transform.parent = tetrominoPoolParent;
+        }
         
-        T.RemoveAllSprites();
-        T.gameObject.SetActive(false);
-        T.transform.parent = tetrominoPoolParent;
     }
 
     public void DisableTetrominoSprite(SpriteRenderer sr)
@@ -89,6 +98,5 @@ public class TetrominoManager : MonoBehaviour
         sr.transform.parent = tetrominoSpritePoolParent;
     }
 
- 
-
+   
 }

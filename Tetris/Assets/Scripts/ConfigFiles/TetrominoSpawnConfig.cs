@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enums;
 
-namespace Configs.TetrominoSO.SpawnSO
+namespace Configs
 {
    
    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/TetrominoSpawnConfig", order = 1)]
-   public class TetrominoSpawnConfig : ScriptableObject
+   public class TetrominoSpawnConfig : BaseConfig
    {
       public List<Tetromino> TetrominoPrefabs;
       public int TetrominoPoolAmount;

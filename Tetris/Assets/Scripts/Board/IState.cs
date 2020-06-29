@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class InputConfig : ScriptableObject
+public interface IState
 {
-    
+   void Entry();
+   void StateUpdate();
+   void Exit();
 }

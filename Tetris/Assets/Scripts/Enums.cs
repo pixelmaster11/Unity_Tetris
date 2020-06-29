@@ -24,4 +24,21 @@ namespace Enums
         Queued
     }
 
+    public enum BoardStateType
+    {
+        InitState = 0,
+        AutoFallState,
+        LockingState,
+        LineCompletionState
+    }
+
+
+    public enum ConfigType
+    {
+        Board = 0,
+        KeyboardInput,
+        TetrominoSpawn,
+        Tetromino
+    }
+
 }

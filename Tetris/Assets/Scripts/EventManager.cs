@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using Configs;
+using Enums;
 
 public class MoveEventArgs:EventArgs
 {
@@ -39,5 +40,9 @@ public static class EventManager
 
     public delegate void Snap();
     public static Snap SnapEvent;
+
+
+
+
 
 }

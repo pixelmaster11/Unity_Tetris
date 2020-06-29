@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enums;
-using Configs.TetrominoSO.SpawnSO;
+using Configs;
 
 namespace TetrominoSpawnSystem
 {
