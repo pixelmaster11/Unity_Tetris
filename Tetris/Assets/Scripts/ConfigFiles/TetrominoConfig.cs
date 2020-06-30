@@ -46,7 +46,8 @@ namespace Configs
         [SerializeField]
         protected Color32 ghostColor = Color.white;
 
-       
+      
+
         public Sprite TetrominoSprite
         {
             get
@@ -114,11 +115,15 @@ namespace Configs
             }
         }
 
+     
+
         /// <summary>
         /// Abstract method which returns the 2D-matrix of the Tetromino. 
         /// </summary>
         /// <returns></returns>
         public abstract int[,] GetMatrix();
+
+        
         
     }
 }

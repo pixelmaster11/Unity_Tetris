@@ -3,27 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using Configs;
 
-public abstract class BoardState : IState
+namespace BoardSystem
 {
-    protected BoardStateController stateController;
-    protected Board board;
-    protected BoardConfig boardConfig;
 
-   
-    public abstract void Entry();
-    public abstract void StateUpdate();
-    public abstract void Exit();
-
-
-    public BoardState(Board _board, BoardStateController _controller)
+    /// <summary>
+    /// Base class for all Board States
+    /// </summary>
+    public abstract class BoardState : IState
     {
-        board = _board;
-        stateController = _controller;
-        boardConfig = board.boardConfig;
+        //Reference to board state machine 
+        protected BoardStateController stateController;
+
+        //Reference to Board data
+        protected Board board;
+
+        //Reference to cache board config file
+        protected BoardConfig boardConfig;
+
+    
+        public abstract void Entry();
+        public abstract void StateUpdate();
+        public abstract void Exit();
+
+        //Cache References 
+        public BoardState(Board _board, BoardStateController _controller)
+        {
+            board = _board;
+            stateController = _controller;
+            boardConfig = board.boardConfig;
+
+        }
 
     }
-
-
- 
-  
+    
 }

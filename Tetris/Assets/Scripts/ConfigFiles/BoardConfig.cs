@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using Enums;
 
 namespace Configs
 {
@@ -27,6 +28,11 @@ namespace Configs
         //Code to be used for Boundary
         public const int BOUNDARY = 101;
 
-    
+        //Type of rotation to be used to rotate tetrominos
+        public RotateType rotationType;
+
+        //Time after which tetrominos automatically fall
+        public float fallTime = 0.5f;
+
     }
 }

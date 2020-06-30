@@ -41,4 +41,15 @@ namespace Enums
         Tetromino
     }
 
+    public enum RotateType
+    {
+        Matrix = 0,
+        Nintendo,
+        Gameboy,
+        Original,
+        Sega,
+        Arika,
+        Super
+    }
+
 }

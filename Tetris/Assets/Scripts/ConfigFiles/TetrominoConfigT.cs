@@ -10,7 +10,7 @@ namespace Configs.TetrominoSO
    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/TetrominoConfig/T")]
    public class TetrominoConfigT:TetrominoConfig
    {
-      public readonly int[,] MATRIX ={{ 0 , 0 , 0 , 0 },
+      private readonly int[,] MATRIX ={{ 0 , 0 , 0 , 0 },
                                        { 0 , 0 , 1 , 0 },
                                        { 0 , 1 , 1 , 0 },
                                        { 0 , 0 , 1 , 0 } };

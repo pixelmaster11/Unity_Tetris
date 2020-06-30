@@ -7,7 +7,7 @@ using Configs;
 /// <summary>
 /// Base Tetromino class
 /// </summary>
-public class Tetromino : MonoBehaviour, IMovable, IRotateable
+public class Tetromino : MonoBehaviour
 {
 
     //Reference to shared Tetromino Scriptable object configuration file
@@ -18,6 +18,21 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
     [SerializeField]
     private List<SpriteRenderer> tetrominoSprites;
     
+    //Current rotation of the tetromino
+    [SerializeField]
+    protected int rotID;
+
+    //Access rotation id
+    public int RotateID
+    {
+        get
+        {
+            return rotID;
+        }
+
+        private set{}
+    }
+
 
    /// <summary>
    /// Function that saves a sprite associated to this tetromino
@@ -52,7 +67,23 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
         }
     }
 
-    
+
+     /// <summary>
+    /// Sets the rotation id based on rotation direction
+    /// </summary>
+    /// <returns></returns>
+    public void SetTetrominoRotation(int rotDir)
+    {
+        rotID += rotDir;
+
+        if(rotID > 3)
+            rotID = 0;
+
+        if(rotID < 0)
+            rotID = 3;
+    }
+
+  
   
     /// <summary>
     /// Returns the 2D-Matrix from the config file
@@ -129,13 +160,6 @@ public class Tetromino : MonoBehaviour, IMovable, IRotateable
         return tetrominoConfig.GhostColor;
     }
 
-    public void Move()
-    {
-       
-    }
-
-    public void Rotate()
-    {
-        
-    }
+   
+  
 }

@@ -3,15 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateCommand : InputCommand
+namespace InputSystem
 {
-    public override void Execute(object sender, EventArgs eventArgs)
+    /// <summary>
+    /// Issues Rotate Left / Right Command
+    /// </summary>
+    public class RotateCommand : InputCommand
     {
-        RotateEventArgs rotateEventArgs = (RotateEventArgs) eventArgs;
+        public override void Execute(object sender, EventArgs eventArgs)
+        {   
+            //Get Rotate event arguemetns
+            RotateEventArgs rotateEventArgs = (RotateEventArgs) eventArgs;
 
-        if(EventManager.RotateEvent != null)
-        {
-            EventManager.RotateEvent(rotateEventArgs.rotateDirection);
+            //Raise Rotate Event
+            if(EventManager.RotateEvent != null)
+            {
+                EventManager.RotateEvent(rotateEventArgs.rotateDirection);
+            }
         }
     }
+
 }

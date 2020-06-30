@@ -3,13 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnapCommand : InputCommand
+namespace InputSystem
 {
-    public override void Execute(object sender, EventArgs eventArgs)
+    /// <summary>
+    /// Issues a Snap command
+    /// </summary>
+    public class SnapCommand : InputCommand
     {
-        if(EventManager.SnapEvent != null)
-        {
-            EventManager.SnapEvent();
+        public override void Execute(object sender, EventArgs eventArgs)
+        {   
+            //Raise Snap Event
+            if(EventManager.SnapEvent != null)
+            {
+                EventManager.SnapEvent();
+            }
         }
     }
+
 }

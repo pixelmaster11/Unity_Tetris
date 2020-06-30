@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class InputCommand : ICommand
+
+namespace InputSystem
 {
-    public abstract void Execute(object sender, EventArgs eventArgs);
-    
-  
+
+    /// <summary>
+    /// Base class for all Input Commands
+    /// </summary>
+    public abstract class InputCommand : ICommand
+    {
+        public abstract void Execute(object sender, EventArgs eventArgs);
+        
+    }
+
 }

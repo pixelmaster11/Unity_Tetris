@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using Configs;
-using Enums;
+﻿using System;
 
+/// <summary>
+/// Custom Movement event arguement class.!--
+/// Used to pass custom arguements to commands
+/// </summary>
 public class MoveEventArgs:EventArgs
 {
     public readonly int xDir;
@@ -17,6 +16,10 @@ public class MoveEventArgs:EventArgs
     }
 }
 
+/// <summary>
+/// Custom Rotate event arguement class
+/// Used to pass custom arguements to commands
+/// </summary>
 public class RotateEventArgs : EventArgs
 {
     public readonly int rotateDirection;
@@ -28,21 +31,22 @@ public class RotateEventArgs : EventArgs
 }
 
 
-
+/// <summary>
+/// Main class responsible for all events
+/// </summary>
 public static class EventManager
 {
-    
+    //Move left / right event
     public delegate void Move(int xDir, int yDir);
     public static Move MoveEvent;
 
+    //Rotate left / right event
     public delegate void Rotate(int rDir);
     public static Rotate RotateEvent;
 
+    //Snap event
     public delegate void Snap();
     public static Snap SnapEvent;
-
-
-
 
 
 }
