@@ -5,7 +5,9 @@ using UnityEngine;
 namespace Configs
 {
 
-
+  /// <summary>
+  /// Config file that maps keyboard bindings
+  /// </summary>
   [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/InputConfig/Keyboard", order = 1)]
   public class KeyboardInputConfig : InputConfig
   {

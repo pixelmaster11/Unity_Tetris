@@ -20,6 +20,15 @@ MonoBehaviour:
   - {fileID: 2466930019905457704, guid: eb482a09370cbbf40bdfa1783a0cc12e, type: 3}
   - {fileID: 1873727345877711297, guid: 26c5f58dd03d7714f8b41a8825f7b0cc, type: 3}
   - {fileID: 4483567739013274802, guid: b112604cf10317d41a16257452aa0ee6, type: 3}
+  PreviewTetrominoPrefabs:
+  - {fileID: 9025701725300620844, guid: de43436a83c9c404ea6ad8e314e6a783, type: 3}
+  - {fileID: 7276338000681787514, guid: bd9894a35b56a6e489358c1f3818e1e4, type: 3}
+  - {fileID: -2997425237966938229, guid: c5fc4509ff4ae534b8360aa885d94fca, type: 3}
+  - {fileID: -3458144527303146178, guid: b73e53220ce322144b70cfd1b9b9455f, type: 3}
+  - {fileID: -540470979684490520, guid: 97e6dd67817f70b4c84f24998f1434ee, type: 3}
+  - {fileID: -8073272970904169088, guid: c9c32da3127c15a4ab4878a065607758, type: 3}
+  - {fileID: 2728338733169400034, guid: b7097105e024313479e23cd615e50391, type: 3}
   TetrominoPoolAmount: 4
   TetrominoSpritePoolAmount: 10
   TetrominoSpawnType: 0
+  MaxTetrominosInQueue: 3

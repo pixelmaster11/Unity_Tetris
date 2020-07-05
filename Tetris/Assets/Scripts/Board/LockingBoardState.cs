@@ -11,7 +11,7 @@ namespace BoardSystem
     /// </summary>
     public class LockingBoardState : BoardState
     {
-
+        
         public LockingBoardState(Board _board, BoardStateController _controller) : base(_board, _controller)
         {
         
@@ -21,7 +21,6 @@ namespace BoardSystem
         {
         
             LockPiece();
-
             stateController.ChangeState(BoardStateType.LineCompletionState);
         }
 
@@ -36,7 +35,7 @@ namespace BoardSystem
         }
 
         //Lock Piece on Board
-        public void LockPiece()
+        private void LockPiece()
         {
         
             //TUT : y -> Y-axis, x -> X-axis
@@ -70,7 +69,11 @@ namespace BoardSystem
                 }
             }
 
+          
+
         }
+
+    
     }
 
 }

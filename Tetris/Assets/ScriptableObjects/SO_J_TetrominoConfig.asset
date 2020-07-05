@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a3247f4d7c87a44aa8b1b958333a7a, type: 3}
   m_Name: SO_J_TetrominoConfig
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 2919790dfc0315e41b29c64dd27bd51b, type: 3}
+  sprite: {fileID: 21300000, guid: bd91f1ced6d448244b4194e13da26319, type: 3}
   ghostSprite: {fileID: 21300000, guid: e7cc6bfb50a7c5b42a44468f55145753, type: 3}
   totalSprites: 4
   id: 5
@@ -24,3 +24,4 @@ MonoBehaviour:
   ghostColor:
     serializedVersion: 2
     rgba: 4279203791
+  applyColor: 0

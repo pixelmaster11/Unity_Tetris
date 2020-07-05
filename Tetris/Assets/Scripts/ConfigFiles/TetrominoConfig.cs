@@ -46,7 +46,9 @@ namespace Configs
         [SerializeField]
         protected Color32 ghostColor = Color.white;
 
-      
+        //Whether to apply color for sprite
+        [SerializeField]
+        protected bool applyColor = true;
 
         public Sprite TetrominoSprite
         {
@@ -93,7 +95,10 @@ namespace Configs
         {
             get
             {
-                return color;
+                if(applyColor)
+                    return color;
+                else
+                    return Color.white;
             }
         }
 

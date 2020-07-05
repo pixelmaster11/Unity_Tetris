@@ -5,17 +5,27 @@ using Enums;
 using Configs;
 
 namespace TetrominoSpawnSystem
-{
-
+{   
+    /// <summary>
+    /// Responsible for spawning tetrominos using set spawn method
+    /// </summary>
     public class TetrominoSpawner 
     {
         //Reference to Tetromino Factory and Sprite Factory
         TetrominoFactory tetrominoFactory;
         TetrominoSpritePool tetrominoSpritePool;
+    
+
+        TetrominoSpawnConfig config;
+        private Queue <Tetromino> spawnQueue;
+
+      
 
         //Set Spawn connfigs
         public TetrominoSpawner(TetrominoSpawnConfig spawnConfig, Transform tetrominoParent, Transform spriteParent)
-        {
+        {   
+            config = spawnConfig;
+
             switch(spawnConfig.TetrominoSpawnType)
             {
                 case Enums.TetrominoSpawnType.Random:
@@ -30,6 +40,7 @@ namespace TetrominoSpawnSystem
             }
 
             tetrominoSpritePool = new TetrominoSpritePool(spawnConfig.TetrominoPrefabs, spawnConfig.TetrominoPoolAmount, spriteParent);
+           
             
         }
 
@@ -41,6 +52,7 @@ namespace TetrominoSpawnSystem
         {
             tetrominoFactory.CreatePool();
             tetrominoSpritePool.CreatePool();
+            CreateSpawnQueue();
         }
 
 
@@ -50,7 +62,13 @@ namespace TetrominoSpawnSystem
         /// <returns></returns>
        public Tetromino GetTetromino()
         {
-            return tetrominoFactory.GetTetromino();
+
+            //return tetrominoFactory.GetTetromino();
+            Tetromino tetromino = spawnQueue.Dequeue();
+
+            FillSpawnQueue();
+
+            return tetromino;
         }
 
         /// <summary>
@@ -74,8 +92,30 @@ namespace TetrominoSpawnSystem
         }
 
 
-        
-     
+        private void CreateSpawnQueue()
+        {
+            spawnQueue = new Queue<Tetromino>();
+
+            for(int i = 0; i < config.MaxTetrominosInQueue; i++)
+            {
+                FillSpawnQueue();
+            }
+
+            
+        }
+
+
+        private void FillSpawnQueue()
+        {
+            Tetromino t = tetrominoFactory.GetTetromino();
+            spawnQueue.Enqueue(t);                      
+
+            if(EventManager.TetrominoSpawnEvent != null)
+            {
+                EventManager.TetrominoSpawnEvent(t.GetTetrominoID());
+            }
+            
+        }   
         
     }
 

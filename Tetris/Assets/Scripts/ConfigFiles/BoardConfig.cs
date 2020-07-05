@@ -4,7 +4,9 @@ using Enums;
 
 namespace Configs
 {
-
+    /// <summary>
+    /// Config class responsible for all board / game settings
+    /// </summary>
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BoardConfigSO", order = 1)]
     public class BoardConfig : BaseConfig
     {
@@ -32,7 +34,10 @@ namespace Configs
         public RotateType rotationType;
 
         //Time after which tetrominos automatically fall
-        public float fallTime = 0.5f;
+        public float fallTime = 1f;
+
+        //Fall time decrement
+        public float fallMultiplier = 0.1f;
 
     }
 }

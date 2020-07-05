@@ -16,7 +16,9 @@ namespace TetrominoSpawnSystem
             prefabs = _prefabs;
             amount = _amount;
             poolParent = _parent;
-            
+
+            //Random seed
+            Random.InitState((int)System.DateTime.Now.Ticks);
         }
 
         /// <summary>
@@ -42,8 +44,7 @@ namespace TetrominoSpawnSystem
         /// <returns></returns>
         public override Tetromino GetTetromino()
         {   
-            //Random seed
-            Random.InitState((int)System.DateTime.Now.Ticks);
+            
             int randID = Random.Range(0, prefabs.Count);
 
             possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == randID);
