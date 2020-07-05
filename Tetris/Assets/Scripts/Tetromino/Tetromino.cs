@@ -7,6 +7,7 @@ using Configs;
 /// <summary>
 /// Base Tetromino class
 /// </summary>
+//TODO: Add Despawn Spawn Callbacks
 public class Tetromino : MonoBehaviour
 {
 
@@ -20,7 +21,11 @@ public class Tetromino : MonoBehaviour
     
     //Current rotation of the tetromino
     [SerializeField]
-    protected int rotID;
+    private int rotID;
+
+    //Whether the piece is holded
+    [SerializeField]
+    private bool isHolded;
 
     //Access rotation id
     public int RotateID
@@ -34,6 +39,47 @@ public class Tetromino : MonoBehaviour
     }
 
 
+    //Access Holded value
+    public bool IsHolded
+    {
+        get
+        {
+            return isHolded;
+        }
+
+        private set
+        {
+           
+        }
+        
+    }
+
+
+    public void OnSpawn()
+    {
+        
+    }
+
+    public void OnDespawn()
+    {
+       isHolded = false;
+    }
+
+    
+    /// <summary>
+    /// Changes holded value 
+    /// </summary>
+    public void OnHold()
+    {
+        isHolded = !isHolded;
+    }
+  
+
+    public List<SpriteRenderer> GetSprites()
+    {
+        return tetrominoSprites;
+    }
+
    /// <summary>
    /// Function that saves a sprite associated to this tetromino
    /// </summary>
@@ -46,6 +92,8 @@ public class Tetromino : MonoBehaviour
         }
         
     }
+
+  
 
     /// <summary>
     /// Function that removes a sprite associated with this tetromino
@@ -61,6 +109,8 @@ public class Tetromino : MonoBehaviour
 
     public void RemoveAllSprites()
     {
+        
+
         if(tetrominoSprites.Count > 0)
         {
             tetrominoSprites.Clear();

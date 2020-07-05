@@ -29,6 +29,7 @@ namespace InputSystem
         private InputCommand moveDir = new MoveCommand();
         private InputCommand rotateDir = new RotateCommand();
         private InputCommand snap = new SnapCommand();
+        private InputCommand hold = new HoldCommand();
 
         //Left / Right move and rotate event arguements
         MoveEventArgs moveDownArgs = new MoveEventArgs(0, -1);
@@ -97,6 +98,14 @@ namespace InputSystem
             {             
                 snap.Execute(this.snap, System.EventArgs.Empty);
                 inputCommands.Push(snap); 
+            }
+
+
+             //Hold Piece
+            if(Input.GetKeyDown(inputConfig.Hold))
+            {             
+                hold.Execute(this.hold, System.EventArgs.Empty);
+                inputCommands.Push(hold); 
             }
 
         

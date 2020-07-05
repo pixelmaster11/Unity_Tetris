@@ -33,6 +33,10 @@ namespace BoardSystem
         //Rotation strategy
         private IRotateStrategy rotateStrategy;
 
+        private Tetromino holdPiece;
+        private int[,] holdPieceMatrix;
+        
+
         //On Create
         public AutoFallBoardState(Board _board, BoardStateController _controller, TetrominoManager _tMan) : base(_board, _controller)
         {
@@ -54,6 +58,10 @@ namespace BoardSystem
             EventManager.MoveEvent += MoveIssued;
             EventManager.RotateEvent += RotateIssued;
             EventManager.SnapEvent += SnapIssued;
+            EventManager.HoldCommandEvent += HoldIssued;
+
+            //Disable any previously active tetrominoes
+            DisableTetromino();
 
             //Get a new tetromino
             GetTetromino();
@@ -65,6 +73,7 @@ namespace BoardSystem
             EventManager.MoveEvent -= MoveIssued;
             EventManager.RotateEvent -= RotateIssued;
             EventManager.SnapEvent -= SnapIssued;
+            EventManager.HoldCommandEvent -= HoldIssued;
         }
 
 
@@ -137,6 +146,39 @@ namespace BoardSystem
             SnapToGhost();
         }
 
+
+        /// <summary>
+        /// Subscribed to Hold Command
+        /// </summary>
+        private void HoldIssued()
+        {   
+
+            //If no hold piece
+            if(holdPiece == null)
+            {
+                //Assign current piece to hold and Get new one
+                holdPiece = board.tetromino;
+                holdPieceMatrix = board.currPiece;
+                holdPiece.OnHold();
+
+                GetTetromino();          
+
+            }
+
+            //Current piece goes to hold and hold pieces becomes current
+            else
+            {                          
+                GetTetromino(true);
+            }
+            
+            //Raise Hold Piece UI event
+            if(EventManager.HoldPieceEvent != null)
+            {
+                EventManager.HoldPieceEvent(holdPiece.GetTetrominoID());
+            }
+            
+        }
+
         /// <summary>
         /// Update the board if piece is moved or rotated
         /// </summary>
@@ -154,16 +196,22 @@ namespace BoardSystem
         
         
         //Gets the tetromino from pool
-        private void GetTetromino()
+        private void GetTetromino(bool isHoldedPiece = false)
         {
-            
-            //Disable any previously active tetrominoes
-            DisableTetromino();
+            //Swap Holded and Current Piece
+            if(isHoldedPiece)
+            {
+                SwapHoldPiece();            
+            }
 
-            //Get new tetromino from pool
-            board.tetromino = tetrominoManager.GetTetromino();
-            board.currPiece = board.tetromino.GetTetrominoMatrix(); 
-
+            else
+            {
+                //Get new tetromino from pool and store it matrix
+                board.tetromino = tetrominoManager.GetTetromino();
+                board.currPiece = board.tetromino.GetTetrominoMatrix(); 
+                
+            }
+           
             //Middle column of the board
             board.currentPosX = boardConfig.width / 2 - 1;
 
@@ -171,13 +219,35 @@ namespace BoardSystem
             board.currentPosY = boardConfig.height - 3;
 
         
+            UpdateBoard();
 
             //Display the piece and its ghost
-            DisplayPiece( board.currentPosX,  board.currentPosY);
-            Ghost();
+            //DisplayPiece(board.currentPosX,  board.currentPosY);
+            //Ghost();
 
         
 
+        }
+
+
+        /// <summary>
+        /// Swaps the current and hold pieces
+        /// </summary>
+        private void SwapHoldPiece()
+        {
+            Tetromino temp = holdPiece;
+            int[,] tempMatrix = holdPieceMatrix;
+
+            //Change holded values on both pieces
+            holdPiece.OnHold();
+            board.tetromino.OnHold();
+
+            holdPiece = board.tetromino;
+            holdPieceMatrix = board.currPiece;
+                
+            board.tetromino = temp;
+            board.currPiece = tempMatrix;    
+                               
         }
 
 
@@ -200,8 +270,6 @@ namespace BoardSystem
                         {   
                             
                             SpriteRenderer sr = board.graphicalBoard[x, y];
-                            //graphicalBoard[x, y].gameObject.SetActive(false);
-                            //graphicalBoard[x, y].transform.parent = this.transform;
                             board.graphicalBoard[x,y] = null;
                             DisableTetrominoSprite(sr);
 
@@ -454,8 +522,7 @@ namespace BoardSystem
         //Disables the active tetromino
         private void DisableTetromino()
         {
-        tetrominoManager.DisableTetromino(board.tetromino);
-
+            tetrominoManager.DisableTetromino(board.tetromino);
         }
 
         //Change to Lock state

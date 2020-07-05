@@ -58,7 +58,7 @@ namespace TetrominoSpawnSystem
             int queuedID = tetrominoQueue.Dequeue();
             tetrominoQueue.Enqueue(queuedID);
 
-            possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == queuedID);
+            possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == queuedID && !x.IsHolded);
 
             if(possible.Count > 0)
             {   

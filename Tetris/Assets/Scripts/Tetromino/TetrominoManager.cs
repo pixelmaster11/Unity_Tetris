@@ -76,9 +76,13 @@ public class TetrominoManager : Configurable
     {
         Tetromino T = tetrominoSpawner.GetTetromino();
         T.gameObject.SetActive(true);
+        T.OnSpawn();
         T.transform.parent = null;
         return T;
     }
+
+
+ 
 
 
     /// <summary>
@@ -86,14 +90,21 @@ public class TetrominoManager : Configurable
     /// </summary>
     /// <param name="T">Tetromino to disable</param>
     public void DisableTetromino(Tetromino T)
-    {
+    {   
         if(T != null)
         {
             T.RemoveAllSprites();
-            T.gameObject.SetActive(false);
-            T.transform.parent = tetrominoPoolParent;
+
+            if(!T.IsHolded)
+            {
+                
+                T.OnDespawn();
+                T.gameObject.SetActive(false);      
+                T.transform.parent = tetrominoPoolParent;
+            }
         }
-        
+    
+  
     }
 
     /// <summary>

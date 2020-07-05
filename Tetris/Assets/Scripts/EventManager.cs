@@ -49,7 +49,10 @@ public static class EventManager
     public static Snap SnapEvent;
 
     public delegate void Hold();
-    public static Hold HoldEvent;
+    public static Hold HoldCommandEvent;
+
+    public delegate void HoldPiece(int id);
+    public static HoldPiece HoldPieceEvent;
 
     public delegate void TetrominoSpawn(int id);
     public static TetrominoSpawn TetrominoSpawnEvent;

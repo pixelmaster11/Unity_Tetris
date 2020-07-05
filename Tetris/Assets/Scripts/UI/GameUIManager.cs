@@ -12,15 +12,22 @@ public class GameUIManager : MonoBehaviour
     private List<PreviewTetromino> previewTetrominos;
     private PreviewTetrominoFactory previewTetrominoFactory;
 
+    [Header("Holded Tetromino")]
+    [SerializeField]
+    private Transform holdPosition;
+
+    private PreviewTetromino holdTetromino;
 
     private void OnEnable()
     {
         EventManager.TetrominoSpawnEvent += DisplayPreview;
+        EventManager.HoldPieceEvent += DisplayHoldPiece;
     }
 
     private void OnDisable()
     {
         EventManager.TetrominoSpawnEvent -= DisplayPreview;
+        EventManager.HoldPieceEvent -= DisplayHoldPiece;
     }
 
     public void SetSpawnConfig(BaseConfig config)
@@ -57,6 +64,19 @@ public class GameUIManager : MonoBehaviour
         {
             previewTetrominos[i].transform.position = previewPositions[i].position;
         }
+    }
+
+
+    private void DisplayHoldPiece(int id)
+    {   
+        if(holdTetromino != null)
+        {
+            holdTetromino.gameObject.SetActive(false);
+        }
+
+        holdTetromino = previewTetrominoFactory.GetPreview(id);
+        holdTetromino.transform.position = holdPosition.position;
+        holdTetromino.gameObject.SetActive(true);
     }
 
 

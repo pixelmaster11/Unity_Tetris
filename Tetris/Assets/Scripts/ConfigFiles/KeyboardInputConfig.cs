@@ -30,6 +30,9 @@ namespace Configs
     [SerializeField]
     private KeyCode snap = KeyCode.W;
 
+    [SerializeField]
+    private KeyCode hold = KeyCode.Space;
+
     public KeyCode MoveLeft
     {
         get
@@ -75,6 +78,14 @@ namespace Configs
         get
         {
             return snap;
+        }
+      }
+
+      public KeyCode Hold
+      {
+        get
+        {
+            return hold;
         }
       }
 
