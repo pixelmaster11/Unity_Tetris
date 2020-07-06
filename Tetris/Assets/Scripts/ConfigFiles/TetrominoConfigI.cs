@@ -12,10 +12,11 @@ namespace Configs.TetrominoSO
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/TetrominoConfig/I", order = 1)]
     public class TetrominoConfigI : TetrominoConfig
     {
-        private readonly int[,] MATRIX ={{ 0 , 0 , 1 , 0 },
+        private readonly int[,] MATRIX =    {{ 0 , 0 , 1 , 0 },
                                         { 0 , 0 , 1 , 0 },
                                         { 0 , 0 , 1 , 0 },
                                         { 0 , 0 , 1 , 0 } };
+
 
     /// <summary>
     /// Returns the I tetromino matrix

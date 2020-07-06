@@ -35,8 +35,8 @@ namespace InputSystem
         MoveEventArgs moveDownArgs = new MoveEventArgs(0, -1);
         MoveEventArgs moveLeftArgs = new MoveEventArgs(-1, 0);
         MoveEventArgs moveRightArgs = new MoveEventArgs(1, 0);
-        RotateEventArgs rotateRightArgs = new RotateEventArgs(-1);
-        RotateEventArgs rotateLeftArgs = new RotateEventArgs(1);
+        RotateEventArgs rotateRightArgs = new RotateEventArgs(1);
+        RotateEventArgs rotateLeftArgs = new RotateEventArgs(-1);
 
         //Stack to store input commands
         Stack<InputCommand> inputCommands = new Stack<InputCommand>();

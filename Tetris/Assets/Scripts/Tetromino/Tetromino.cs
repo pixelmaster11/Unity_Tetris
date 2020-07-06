@@ -27,6 +27,10 @@ public class Tetromino : MonoBehaviour
     [SerializeField]
     private bool isHolded;
 
+    //Whether the piece has been spawned (Enqueued in spawn queue)
+    [SerializeField]
+    private bool isSpawned;
+
     //Access rotation id
     public int RotateID
     {
@@ -47,22 +51,38 @@ public class Tetromino : MonoBehaviour
             return isHolded;
         }
 
-        private set
-        {
-           
-        }
-        
+        private set {}
+ 
     }
 
+    //Access Spawn value
+    public bool IsSpawned
+    {
+        get
+        {
+            return isSpawned;
+        }
 
+        private set {}
+    }
+
+    //Called when a tetromino is enqueued in spawn queue
     public void OnSpawn()
     {
+        //Set Random Rotation
+        Random.InitState((int)System.DateTime.Now.Ticks);
+        rotID = Random.Range(0, 3);
+
+        isSpawned = true;
         
     }
 
+    //Called when tetromino is deactivated
     public void OnDespawn()
-    {
-       isHolded = false;
+    {      
+        rotID = 0;
+        isHolded = false;
+        isSpawned = false;
     }
 
     
@@ -75,6 +95,10 @@ public class Tetromino : MonoBehaviour
     }
   
 
+    /// <summary>
+    /// Returns all associated sprites
+    /// </summary>
+    /// <returns></returns>
     public List<SpriteRenderer> GetSprites()
     {
         return tetrominoSprites;
@@ -107,10 +131,11 @@ public class Tetromino : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Removes all associated sprite with this tetromino
+    /// </summary>
     public void RemoveAllSprites()
     {
-        
-
         if(tetrominoSprites.Count > 0)
         {
             tetrominoSprites.Clear();

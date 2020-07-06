@@ -20,6 +20,6 @@ MonoBehaviour:
     type: 3}
   boundarySprite: {fileID: 1297922847424170149, guid: e695aeb5c7fa5124dab6c67a67d6f028,
     type: 3}
-  rotationType: 0
-  fallTime: 1
+  rotationType: 1
+  fallTime: 1000
   fallMultiplier: 0.1

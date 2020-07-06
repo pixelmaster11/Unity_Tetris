@@ -5,6 +5,7 @@ using Enums;
 
 /// <summary>
 /// This class performs NES rotation method
+///  Order 1,4,3,2 has to be consistent with common matrix Clockwise rotation method
 /// </summary>
 public class NESRotate : IRotateStrategy
 {
@@ -176,11 +177,11 @@ public class NESRotate : IRotateStrategy
         I_pieces.Add(I_1);
         I_pieces.Add(I_2);
 
-        
+        //Order is 1,4,3,2 to be consistent with common matrix Clockwise rotation
         T_pieces.Add(T_1);
-        T_pieces.Add(T_2);
-        T_pieces.Add(T_3);
         T_pieces.Add(T_4);
+        T_pieces.Add(T_3);
+        T_pieces.Add(T_2);
 
         O_pieces.Add(O_1);
         O_pieces.Add(O_1);
@@ -188,24 +189,24 @@ public class NESRotate : IRotateStrategy
         O_pieces.Add(O_1);
 
         S_pieces.Add(S_1);
-        S_pieces.Add(S_2);
-        S_pieces.Add(S_1);
+        S_pieces.Add(S_4);
+        S_pieces.Add(S_3);
         S_pieces.Add(S_2);
      
         Z_pieces.Add(Z_1);
-        Z_pieces.Add(Z_2);
-        Z_pieces.Add(Z_1);
+        Z_pieces.Add(Z_4);
+        Z_pieces.Add(Z_3);
         Z_pieces.Add(Z_2);
 
         J_pieces.Add(J_1);
-        J_pieces.Add(J_2);
-        J_pieces.Add(J_3);
         J_pieces.Add(J_4);
+        J_pieces.Add(J_3);
+        J_pieces.Add(J_2);
 
         L_pieces.Add(L_1);
-        L_pieces.Add(L_2);
-        L_pieces.Add(L_3);
         L_pieces.Add(L_4);
+        L_pieces.Add(L_3);
+        L_pieces.Add(L_2);
 
       
         //Add all piece rotation lists to dictionary

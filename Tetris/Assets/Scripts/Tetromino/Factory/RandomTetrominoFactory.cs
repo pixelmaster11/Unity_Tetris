@@ -47,11 +47,15 @@ namespace TetrominoSpawnSystem
             
             int randID = Random.Range(0, prefabs.Count);
 
-            possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == randID && !x.IsHolded);
+            //Find all posiible tetrominos from pool which are inactive, not holded and not spawned
+            //Not holded and not spawned required for properly displaying next spawn and hold pieces
+            possible = pool.FindAll(x => !x.gameObject.activeSelf && x.GetTetrominoID() == randID && 
+                                    !x.IsHolded && !x.IsSpawned);
 
             if(possible.Count > 0)
             {   
-                Tetromino obj = possible[0];
+                int randSpawn = Random.Range(0, possible.Count);
+                Tetromino obj = possible[randSpawn];
                 possible.Clear();
 
                 return obj;

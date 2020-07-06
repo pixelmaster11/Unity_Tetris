@@ -5,16 +5,16 @@ using UnityEngine;
 public class PreviewTetrominoFactory 
 {
     //Store the pooled objs
-    protected List<PreviewTetromino> pool;
+    private List<PreviewTetromino> pool;
 
     //List of prefabs to create
-    protected List<PreviewTetromino> prefabs;
+    private List<PreviewTetromino> prefabs;
 
     //Amount to pool
-    protected int amount;
+    private int amount;
 
     //Parent to which all pooled objs are nested
-    protected Transform poolParent;
+    private Transform poolParent;
     
     public PreviewTetrominoFactory(List<PreviewTetromino> _prefabs, int _amount, Transform _parent)
     {

@@ -51,9 +51,9 @@ public static class EventManager
     public delegate void Hold();
     public static Hold HoldCommandEvent;
 
-    public delegate void HoldPiece(int id);
+    public delegate void HoldPiece(int id, int rotID);
     public static HoldPiece HoldPieceEvent;
 
-    public delegate void TetrominoSpawn(int id);
+    public delegate void TetrominoSpawn(Tetromino tetromino);
     public static TetrominoSpawn TetrominoSpawnEvent;
 }

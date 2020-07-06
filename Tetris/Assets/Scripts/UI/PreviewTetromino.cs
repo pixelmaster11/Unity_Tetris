@@ -6,5 +6,6 @@ public class PreviewTetromino : MonoBehaviour
 {
    
    public int ID;
+   public int RotID;
    public Enums.TetrominoType type;
 }

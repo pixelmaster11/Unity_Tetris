@@ -161,8 +161,9 @@ namespace BoardSystem
                 holdPieceMatrix = board.currPiece;
                 holdPiece.OnHold();
 
-                GetTetromino();          
+                GetTetromino();
 
+                
             }
 
             //Current piece goes to hold and hold pieces becomes current
@@ -171,11 +172,14 @@ namespace BoardSystem
                 GetTetromino(true);
             }
             
+
             //Raise Hold Piece UI event
             if(EventManager.HoldPieceEvent != null)
             {
-                EventManager.HoldPieceEvent(holdPiece.GetTetrominoID());
-            }
+                EventManager.HoldPieceEvent(holdPiece.GetTetrominoID(), holdPiece.RotateID);
+            }          
+
+            
             
         }
 
@@ -208,7 +212,23 @@ namespace BoardSystem
             {
                 //Get new tetromino from pool and store it matrix
                 board.tetromino = tetrominoManager.GetTetromino();
-                board.currPiece = board.tetromino.GetTetrominoMatrix(); 
+                board.currPiece = board.tetromino.GetTetrominoMatrix();
+
+                //Sets initial rotation
+                if(boardConfig.rotationType == RotateType.Matrix)
+                {
+                    for(int i = 0; i < board.tetromino.RotateID; i++)
+                    {
+                        board.currPiece = rotateStrategy.Rotate(board.currPiece, 1, board.tetromino);        
+                    }
+                }
+
+                else
+                {
+                    board.currPiece = rotateStrategy.Rotate(board.currPiece, 0, board.tetromino); 
+                }
+
+            
                 
             }
            
@@ -246,7 +266,9 @@ namespace BoardSystem
             holdPieceMatrix = board.currPiece;
                 
             board.tetromino = temp;
-            board.currPiece = tempMatrix;    
+            board.currPiece = tempMatrix; 
+
+              
                                
         }
 
@@ -311,11 +333,10 @@ namespace BoardSystem
                                 //SHOW USING COROUTINES THAT THE LOCKED PIECES DEOS NOT GET WIPED OUT AS IT IS DISPLAYED  CONSTANTLY USING THIS FUNCTION
                                 //WE ONLY NEED TO DISPLAY THE PIECE GRAPHICALLY TILL ITS LOCKED LOGICALLY
                                 //ONCE ITS LOGICALLY LOCKED THE BOARD WILL DISPLAY THE PIECE
-                                if (board.currPiece[y, x] == 1 && board.graphicalBoard[boardX, boardY] == null)  //&& !isLocked)
+                                if (board.currPiece[y,x] == 1 && board.graphicalBoard[boardX, boardY] == null)  //&& !isLocked)
                                 {    
                                                         
-                                    //Display only piece graphic                       
-                                    //graphicalBoard[pieceOnBoardX, pieceOnBoardY].color = tetrominos[randomPieceID].tetrominoColor;
+                                    
 
                                     SpriteRenderer currPieceSprite;
 

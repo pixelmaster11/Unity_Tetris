@@ -22,7 +22,7 @@ public class MatrixRotate : IRotateStrategy
         {
             for (int j = 0; j < dim; j++)
             {
-                if (direction == 1)
+                if (direction == -1)
                 {
                    npiece[i, j] = piece[dim - 1 - j, i];
               

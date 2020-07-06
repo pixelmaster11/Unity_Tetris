@@ -75,13 +75,14 @@ public class TetrominoManager : Configurable
     public Tetromino GetTetromino()
     {
         Tetromino T = tetrominoSpawner.GetTetromino();
+        
         T.gameObject.SetActive(true);
-        T.OnSpawn();
         T.transform.parent = null;
         return T;
     }
 
 
+    
  
 
 

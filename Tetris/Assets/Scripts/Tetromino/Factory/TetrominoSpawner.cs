@@ -19,7 +19,7 @@ namespace TetrominoSpawnSystem
         TetrominoSpawnConfig config;
         private Queue <Tetromino> spawnQueue;
 
-      
+        
 
         //Set Spawn connfigs
         public TetrominoSpawner(TetrominoSpawnConfig spawnConfig, Transform tetrominoParent, Transform spriteParent)
@@ -97,6 +97,10 @@ namespace TetrominoSpawnSystem
         }
 
 
+        /// <summary>
+        /// Creates a spawn queue with maximum allowed initial pieces 
+        /// Also used to display UI for next piece preview
+        /// </summary>
         private void CreateSpawnQueue()
         {
             spawnQueue = new Queue<Tetromino>();
@@ -109,15 +113,22 @@ namespace TetrominoSpawnSystem
             
         }
 
-
+        /// <summary>
+        /// Gets a tetromino from factory and lines it up in the spawn queue
+        /// </summary>
         private void FillSpawnQueue()
         {
             Tetromino t = tetrominoFactory.GetTetromino();
+
+            //Tetromino is enqueued
+            t.OnSpawn();
+           
             spawnQueue.Enqueue(t);                      
 
+            //Raise spawn event for UI purposes
             if(EventManager.TetrominoSpawnEvent != null)
             {
-                EventManager.TetrominoSpawnEvent(t.GetTetrominoID());
+                EventManager.TetrominoSpawnEvent(t);
             }
             
         }   
