@@ -12,16 +12,24 @@ namespace Configs
     public class ConfigsReferences : ScriptableObject
     {   
         //Spawn config file
-        public TetrominoSpawnConfig tetrominoSpawnConfig;
+        [SerializeField]
+        private TetrominoSpawnConfig tetrominoSpawnConfig;
 
         //All tetromino configs
-        public List<TetrominoConfig> tetrominoConfigs;
+        [SerializeField]
+        private List<TetrominoConfig> tetrominoConfigs;
 
         //Board config file
-        public BoardConfig boardConfig;
+        [SerializeField]
+        private BoardConfig boardConfig;
 
         //All input configs
-        public List<InputConfig> inputConfigs;
+        [SerializeField]
+        private List<InputConfig> inputConfigs;
+
+        //Audio Config file
+        [SerializeField]
+        private AudioConfig audioConfig;
 
         /// <summary>
         /// Returns the proper config file
@@ -40,6 +48,9 @@ namespace Configs
 
                 case ConfigType.TetrominoSpawn:
                 return tetrominoSpawnConfig;
+
+                case ConfigType.Audio:
+                return audioConfig;
 
                 default:
                 return null;

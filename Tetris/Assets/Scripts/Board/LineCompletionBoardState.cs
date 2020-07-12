@@ -14,9 +14,12 @@ namespace BoardSystem
     public class LineCompletionBoardState : BoardState
     {
 
+        //Keep track of lines complete
+        private int linesCompleted;
+
         public LineCompletionBoardState(Board _board, BoardStateController _controller) : base(_board, _controller)
         {
-        
+            linesCompleted = 0;
         }
 
         public override void Entry()
@@ -119,6 +122,16 @@ namespace BoardSystem
                 //Check if line is complete 
                 if (IsLineCompleteAt(y)) 
                 {   
+                    
+                    //Increment lines completed
+                    linesCompleted += 1;
+
+                    //Raise Line Complete Event
+                    if(EventManager.LineCompleteEvent != null)
+                    {
+                        EventManager.LineCompleteEvent(linesCompleted);
+                    }
+
                     //Remove completed line at that row
                     RemoveLineAt(y);
 
@@ -127,6 +140,7 @@ namespace BoardSystem
 
                     //Decrement the row as we have now brought all rows down due to line removal
                     y--;
+
                 }
             }
                 

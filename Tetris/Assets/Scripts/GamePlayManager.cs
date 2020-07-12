@@ -20,8 +20,11 @@ public class GamePlayManager : MonoBehaviour
     TetrominoManager tetrominoManager;
     InputManager inputManager;
 
+    //Reference to Monobehaviour configurables
     [SerializeField]
     GameUIManager gameUIManager;
+    [SerializeField]
+    AudioManager audioManager;
 
     //Reference to Config file
     [SerializeField]
@@ -41,12 +44,20 @@ public class GamePlayManager : MonoBehaviour
 
         //Create and set configurables
         //First all Monobehaviours
+
         if(gameUIManager == null)
         {
             gameUIManager = FindObjectOfType<GameUIManager>();        
         }
+    
+        if(audioManager == null)
+        {
+            audioManager = FindObjectOfType<AudioManager>();        
+        }
+
 
         gameUIManager.SetSpawnConfig(configsReferences.GetConfig(ConfigType.TetrominoSpawn));
+        audioManager.SetSpawnConfig(configsReferences.GetConfig(ConfigType.Audio));
 
         
         board = new Board(configsReferences.GetConfig(ConfigType.Board));
@@ -62,6 +73,7 @@ public class GamePlayManager : MonoBehaviour
     {   
         inputManager.GetInputs();
         boardStateController.StateUpdate();
+        gameUIManager.UIUpdate();
     }
 
 

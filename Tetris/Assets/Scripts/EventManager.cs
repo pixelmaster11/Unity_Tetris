@@ -56,4 +56,13 @@ public static class EventManager
 
     public delegate void TetrominoSpawn(Tetromino tetromino);
     public static TetrominoSpawn TetrominoSpawnEvent;
+
+    public delegate void LineComplete(int linesCompleted);
+    public static LineComplete LineCompleteEvent;
+
+
+    public delegate void CommandSuccess();
+    public static CommandSuccess MoveSuccessEvent;
+    public static CommandSuccess RotateSuccessEvent;
+    public static CommandSuccess SnapSuccessEvent;
 }

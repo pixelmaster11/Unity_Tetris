@@ -32,7 +32,8 @@ namespace BoardSystem
 
         //Rotation strategy
         private IRotateStrategy rotateStrategy;
-
+        private IHoldStrategy holdStrategy;
+        
         private Tetromino holdPiece;
         private int[,] holdPieceMatrix;
         
@@ -119,6 +120,12 @@ namespace BoardSystem
                 board.currentPosY += nextY;
 
                 UpdateBoard();
+
+                //Raise Move Success event
+                if(EventManager.MoveSuccessEvent != null)
+                {
+                    EventManager.MoveSuccessEvent();
+                }
             }
 
         }
@@ -133,6 +140,12 @@ namespace BoardSystem
             if(CanRotate(dir))
             {
                 UpdateBoard();
+
+                //Raise Rotate Success event
+                if(EventManager.RotateSuccessEvent != null)
+                {
+                    EventManager.RotateSuccessEvent();
+                }
             }
         }
 
@@ -144,6 +157,8 @@ namespace BoardSystem
             //Disable previous ghost sprites then snap piece on the ghost
             DisplayBoard();
             SnapToGhost();
+
+          
         }
 
 
@@ -173,7 +188,7 @@ namespace BoardSystem
             }
             
 
-            //Raise Hold Piece UI event
+            //Raise Hold Piece Success event
             if(EventManager.HoldPieceEvent != null)
             {
                 EventManager.HoldPieceEvent(holdPiece.GetTetrominoID(), holdPiece.RotateID);
@@ -241,10 +256,7 @@ namespace BoardSystem
         
             UpdateBoard();
 
-            //Display the piece and its ghost
-            //DisplayPiece(board.currentPosX,  board.currentPosY);
-            //Ghost();
-
+       
         
 
         }
@@ -267,8 +279,7 @@ namespace BoardSystem
                 
             board.tetromino = temp;
             board.currPiece = tempMatrix; 
-
-              
+             
                                
         }
 
@@ -445,8 +456,6 @@ namespace BoardSystem
     
             //TODO: Option to lock immidiately or give 1 extra move
             LockPiece();
-
-            //stateController.ChangeState(BoardStateType.LockingState);
             
         }
 
@@ -517,13 +526,18 @@ namespace BoardSystem
                 {
                     board.currentPosY -= 1;
                     UpdateBoard();
+
+                    //Raise Move Success event
+                    if(EventManager.MoveSuccessEvent != null)
+                    {
+                        EventManager.MoveSuccessEvent();
+                    }
            
                 }
 
                 //If it cannot stop and lock the piece on board
                 else
                 {                          
-                    //stateController.ChangeState(BoardStateType.LockingState);
                     LockPiece();
                 }
 

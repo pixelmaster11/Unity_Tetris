@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Configs;
 using System.Linq;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class responsible for managing gameplay UI
@@ -29,6 +30,9 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private Transform poolTransform;
 
+    [SerializeField]
+    private AnimationCurve posXOffsetCurve;
+
     [Header("Holded Tetromino")]
     //UI position to display hold piece
     [SerializeField]
@@ -44,11 +48,33 @@ public class GameUIManager : MonoBehaviour
     //How many preview pieces to display
     private int maxQueue;
 
+
+    [Header("Texts")]
+
+    [SerializeField]
+    private Text scoreText;
+
+    [SerializeField]
+    private Text linesText;
+
+    [SerializeField]
+    private Text levelText;
+
+    [SerializeField]
+    private Text timeText;
+
+    private float timer; 
+
+
+   
+
     //Subscribe to Events
     private void OnEnable()
     {
         EventManager.TetrominoSpawnEvent += DisplayPreview;
         EventManager.HoldPieceEvent += DisplayHoldPiece;
+
+        EventManager.LineCompleteEvent += DisplayLinesCleared;
     }
 
     //Unsubscribe to Events
@@ -56,6 +82,15 @@ public class GameUIManager : MonoBehaviour
     {
         EventManager.TetrominoSpawnEvent -= DisplayPreview;
         EventManager.HoldPieceEvent -= DisplayHoldPiece;
+
+        EventManager.LineCompleteEvent -= DisplayLinesCleared;
+    }
+
+
+    public void UIUpdate()
+    {
+        timer += Time.deltaTime;
+        DisplayTime();
     }
 
     //Sets the preview factory
@@ -125,8 +160,15 @@ public class GameUIManager : MonoBehaviour
     {
         for(int i = 0; i < previewTetrominos.Count; i++)
         {
-            previewTetrominos.ElementAt(i).transform.position = previewPositions[i].position;
-           
+            PreviewTetromino pt = previewTetrominos.ElementAt(i);
+            //previewTetrominos.ElementAt(i).transform.position = previewPositions[i].position;
+            //previewTetrominos.ElementAt(i).transform.position += new Vector3(Mathf.Sin());
+
+            pt.transform.position = previewPositions[i].position;
+            pt.transform.position += new Vector3(posXOffsetCurve.Evaluate(pt.RotID ), 
+                                                0, 0);
+
+            
         }
     }
 
@@ -169,6 +211,29 @@ public class GameUIManager : MonoBehaviour
     }
 
 
+
+    private void DisplayScore()
+    {
+
+    }
+
+
+    private void DisplayLinesCleared(int linesCleared)
+    {
+        linesText.text = linesCleared.ToString();
+    }
+
+
+    private void DisplayTime()
+    {
+        timeText.text = ((int)timer).ToString();
+    }
+
+
+    private void DisplayLevel()
+    {
+
+    }
     
 
 }

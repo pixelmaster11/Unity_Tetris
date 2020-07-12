@@ -21,12 +21,13 @@ namespace BoardSystem
         {
         
             LockPiece();
+            
             stateController.ChangeState(BoardStateType.LineCompletionState);
         }
 
         public override void Exit()
         {
-            
+            LockComplete();
         }
 
         public override void StateUpdate()
@@ -73,6 +74,16 @@ namespace BoardSystem
 
         }
 
+
+        private void LockComplete()
+        {
+            //Raise Snap Success event
+            if(EventManager.SnapSuccessEvent != null)
+            {
+                EventManager.SnapSuccessEvent();
+            }
+
+        }
     
     }
 

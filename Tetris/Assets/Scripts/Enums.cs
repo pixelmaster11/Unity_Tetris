@@ -38,7 +38,8 @@ namespace Enums
         Board = 0,
         KeyboardInput,
         TetrominoSpawn,
-        Tetromino
+        Tetromino,
+        Audio
     }
 
     public enum RotateType
