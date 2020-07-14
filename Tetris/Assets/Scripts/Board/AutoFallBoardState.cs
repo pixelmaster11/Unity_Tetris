@@ -22,18 +22,19 @@ namespace BoardSystem
 
         //Total locked pieces
         private float lockedPieces; 
-
+        private float fallPieces;
 
         //Reference to tetromino manager to enable/  disable tetorminoes and sprites
         private TetrominoManager tetrominoManager; 
+        private BoardRenderer boardRenderer;
 
         //Ghost piece positions
         private int ghostPosX, ghostPosY;
 
         //Rotation strategy
         private IRotateStrategy rotateStrategy;
-        private IHoldStrategy holdStrategy;
-        
+       
+
         private Tetromino holdPiece;
         private int[,] holdPieceMatrix;
         
@@ -47,15 +48,20 @@ namespace BoardSystem
             //Set fall timers
             fallTime = boardConfig.fallTime;
             fallMultiplier = boardConfig.fallMultiplier;
+            fallPieces = boardConfig.fallPieces;
             lockedPieces = 0;
 
             //Set proper rotation method
             SetRotation();
+
+            boardRenderer = new BoardRenderer(_board, _tMan);
+           
         }
 
         //Subscribe to Input Command Events
         public override void Entry()
         {        
+            
             EventManager.MoveEvent += MoveIssued;
             EventManager.RotateEvent += RotateIssued;
             EventManager.SnapEvent += SnapIssued;
@@ -66,6 +72,13 @@ namespace BoardSystem
 
             //Get a new tetromino
             GetTetromino();
+
+            if(IsGameOver())
+            {
+               stateController.ChangeState(BoardStateType.GameOverState);
+            }
+
+           
         }
 
         //Unsubscribe from Input Command Events as we only accept inputs in this state only
@@ -155,7 +168,7 @@ namespace BoardSystem
         private void SnapIssued()
         {   
             //Disable previous ghost sprites then snap piece on the ghost
-            DisplayBoard();
+            boardRenderer.DisplayBoard();
             SnapToGhost();
 
           
@@ -187,12 +200,11 @@ namespace BoardSystem
                 GetTetromino(true);
             }
             
-
             //Raise Hold Piece Success event
             if(EventManager.HoldPieceEvent != null)
             {
                 EventManager.HoldPieceEvent(holdPiece.GetTetrominoID(), holdPiece.RotateID);
-            }          
+            }        
 
             
             
@@ -204,10 +216,10 @@ namespace BoardSystem
         private void UpdateBoard()
         {
             //Disables any previous picece sprites
-            DisplayBoard();
+            boardRenderer.DisplayBoard();
 
             //Display sprites at new positions
-            DisplayPiece(board.currentPosX, board.currentPosY);
+            boardRenderer.DisplayPiece(board.currentPosX, board.currentPosY);
 
             //Display new ghost 
             Ghost();
@@ -253,7 +265,6 @@ namespace BoardSystem
             //Topmost row of the board
             board.currentPosY = boardConfig.height - 3;
 
-        
             UpdateBoard();
 
        
@@ -279,12 +290,17 @@ namespace BoardSystem
                 
             board.tetromino = temp;
             board.currPiece = tempMatrix; 
-             
+            
+            //If hold only allowed once, unsubscribe from hold input command
+            if(boardConfig.holdType == HoldType.Once)
+            {
+                EventManager.HoldCommandEvent -= HoldIssued;
+            }
                                
         }
 
 
-        /// <summary>
+       /* /// <summary>
         /// This function displays only the locked Tetromino Sprites and removes any not locked Tetromino Sprites
         /// </summary>
         private void DisplayBoard()
@@ -380,7 +396,7 @@ namespace BoardSystem
                                                             
                 }
             }
-        }
+        }*/
 
 
         //DisplayGhost Piece
@@ -396,17 +412,17 @@ namespace BoardSystem
             {
                 ghostPosX =  board.currentPosX;
                 ghostPosY =  board.currentPosY + 1 - rd;
-                DisplayPiece(ghostPosX, ghostPosY, true);
+                boardRenderer.DisplayPiece(ghostPosX, ghostPosY, true);
             }
         
                 
         }
 
 
-        //Can we fit our piece after doing the next move 
+        //Can we move our piece 
         private bool CanMove(int xDir, int yDir)
         {
-            //next piece positions to be performed
+            //next piece positions to be moved to
             int nextPosX =  board.currentPosX + xDir;
             int nextPosY =  board.currentPosY + yDir;
 
@@ -452,7 +468,7 @@ namespace BoardSystem
 
             board.currentPosX = ghostPosX;
             board.currentPosY = ghostPosY;
-            DisplayPiece(ghostPosX, ghostPosY);
+            boardRenderer.DisplayPiece(ghostPosX, ghostPosY);
     
             //TODO: Option to lock immidiately or give 1 extra move
             LockPiece();
@@ -567,13 +583,36 @@ namespace BoardSystem
             lockedPieces ++;
 
             //Decrease fall delay till 0.1 seconds
-            if(lockedPieces % 10 == 0 && fallTime >= 0.1f)
+            if(lockedPieces % fallPieces == 0 && fallTime >= 0.1f)
             {
                 fallTime -= fallMultiplier;
+
+                //Raise fall time decrease event         
+                if(EventManager.FallTimeDecreaseEvent != null)
+                {
+                    EventManager.FallTimeDecreaseEvent(fallTime);
+                }
             }
 
             //Change to Locking state
             stateController.ChangeState(BoardStateType.LockingState);
+        }
+
+        /// <summary>
+        /// Function to check whether game is over at the start
+        /// </summary>
+        /// <returns>Returns true if starting piece itself cannot move down</returns>
+        private bool IsGameOver()
+        {
+            if(!CanMove(0, -1))
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
         }
 
     }

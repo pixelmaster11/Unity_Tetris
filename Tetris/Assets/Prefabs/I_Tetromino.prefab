@@ -45,3 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tetrominoConfig: {fileID: 11400000, guid: 1bcd0610a28c68341b1a967b720419b6, type: 2}
   tetrominoSprites: []
+  rotID: 0
+  isHolded: 0
+  isSpawned: 0

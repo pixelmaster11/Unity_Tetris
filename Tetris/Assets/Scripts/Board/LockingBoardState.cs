@@ -60,8 +60,11 @@ namespace BoardSystem
                                 board.logicalBoard[boardX, boardY] = board.tetromino.GetTetrominoID(); 
 
                                 //After locking the tetromino, its sprites becomes part of the board
-                                if(board.graphicalBoard[boardX, boardY] != null)  
-                                        board.graphicalBoard[boardX, boardY].transform.parent = board.boardTetrominos;         
+                                if(board.graphicalBoard[boardX, boardY] != null)
+                                {
+                                    board.graphicalBoard[boardX, boardY].transform.parent = board.boardTetrominos;
+                                }  
+                                                
 
                             }
                         }
@@ -76,7 +79,8 @@ namespace BoardSystem
 
 
         private void LockComplete()
-        {
+        {   
+            
             //Raise Snap Success event
             if(EventManager.SnapSuccessEvent != null)
             {

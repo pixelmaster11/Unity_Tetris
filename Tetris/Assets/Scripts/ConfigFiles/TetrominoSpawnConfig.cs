@@ -27,6 +27,8 @@ namespace Configs
       //Maximum tetrominos in queue to display in ui
       public int MaxTetrominosInQueue = 3;
 
+      //Whether to display lights
+      public bool EnableLights = true;
       
    }
 

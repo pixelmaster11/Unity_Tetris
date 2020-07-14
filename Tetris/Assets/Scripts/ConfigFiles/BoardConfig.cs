@@ -39,5 +39,11 @@ namespace Configs
         //Fall time decrement
         public float fallMultiplier = 0.1f;
 
+        //Number of pieces after which falltime will be decreased
+        public int fallPieces = 10;
+
+        //Type of hold method to be used
+        public HoldType holdType;
+
     }
 }

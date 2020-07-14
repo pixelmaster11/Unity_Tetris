@@ -23,3 +23,5 @@ MonoBehaviour:
   rotationType: 0
   fallTime: 1
   fallMultiplier: 0.1
+  fallPieces: 10
+  holdType: 1

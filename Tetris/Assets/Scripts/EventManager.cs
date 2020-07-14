@@ -65,4 +65,7 @@ public static class EventManager
     public static CommandSuccess MoveSuccessEvent;
     public static CommandSuccess RotateSuccessEvent;
     public static CommandSuccess SnapSuccessEvent;
+
+    public delegate void FallTime(float fallTime);
+    public static FallTime FallTimeDecreaseEvent;
 }

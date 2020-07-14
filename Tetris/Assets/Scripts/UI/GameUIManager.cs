@@ -75,6 +75,7 @@ public class GameUIManager : MonoBehaviour
         EventManager.HoldPieceEvent += DisplayHoldPiece;
 
         EventManager.LineCompleteEvent += DisplayLinesCleared;
+        
     }
 
     //Unsubscribe to Events
@@ -118,7 +119,7 @@ public class GameUIManager : MonoBehaviour
 
         //Get the preview piece of matching id
         PreviewTetromino p = previewTetrominoFactory.GetPreview(id);
-
+        
         //Set rotation of preivew piece
         p.RotID = rotID;
 
@@ -191,10 +192,11 @@ public class GameUIManager : MonoBehaviour
         
         //Get matching hold piece preview and display it
         holdTetromino = previewTetrominoFactory.GetPreview(id);
+        holdTetromino.RotID = rotID;
         holdTetromino.transform.position = holdPosition.position;
+        holdTetromino.transform.position += new Vector3(posXOffsetCurve.Evaluate(holdTetromino.RotID),0, 0);
         holdTetromino.transform.parent = holdTransform;
         holdTetromino.gameObject.SetActive(true);
-        holdTetromino.RotID = rotID;
 
         //Invert rotations for T, L, J shapes
         if(id == 1 || id == 5 || id == 6)

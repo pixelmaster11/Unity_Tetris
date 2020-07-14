@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour
         EventManager.MoveSuccessEvent += PlayMoveSfx;
         EventManager.RotateSuccessEvent += PlayRotateSfx;
         EventManager.SnapSuccessEvent += PlaySnapSfx;
+
+        EventManager.FallTimeDecreaseEvent += IncreaseBGPitch;
     }
 
      //Unsubscribe to Events
@@ -30,6 +32,8 @@ public class AudioManager : MonoBehaviour
         EventManager.MoveSuccessEvent -= PlayMoveSfx;
         EventManager.RotateSuccessEvent -= PlayRotateSfx;
         EventManager.SnapSuccessEvent -= PlaySnapSfx;
+
+        EventManager.FallTimeDecreaseEvent -= IncreaseBGPitch;
     }
 
     //Sets the preview factory
@@ -40,11 +44,16 @@ public class AudioManager : MonoBehaviour
     }
 
 
+    private void IncreaseBGPitch(float time)
+    {
+        bgSource.pitch += config.BGPitchIncrement;
+    }
+
 
     private void PlayHoldSfx(int id, int rotID)
     {
         AudioSource src = sfxSources[GetFreeAudioSource()];
-        src.PlayOneShot(config.HoldSfx);
+        src.PlayOneShot(config.HoldSfx, config.HoldSfxVolumeScale);
     }
 
 
@@ -59,19 +68,19 @@ public class AudioManager : MonoBehaviour
     private void PlayMoveSfx()
     {
         AudioSource src = sfxSources[GetFreeAudioSource()];
-        src.PlayOneShot(config.MoveSfx, 0.1f);
+        src.PlayOneShot(config.MoveSfx, config.MoveSfxVolumeScale);
     }
 
     private void PlayRotateSfx()
     {
         AudioSource src = sfxSources[GetFreeAudioSource()];
-        src.PlayOneShot(config.RotateSfx, 0.1f);
+        src.PlayOneShot(config.RotateSfx, config.RotateSfxVolumeScale);
     }
 
       private void PlaySnapSfx()
     {
         AudioSource src = sfxSources[GetFreeAudioSource()];
-        src.PlayOneShot(config.SnapSfx, 0.1f);
+        src.PlayOneShot(config.SnapSfx, config.SnapSfxVolumeScale);
     }
 
 
@@ -86,6 +95,7 @@ public class AudioManager : MonoBehaviour
         }
 
         bgSource.clip = config.BgClip;
+        bgSource.loop = true;
         bgSource.Play();
     }
 

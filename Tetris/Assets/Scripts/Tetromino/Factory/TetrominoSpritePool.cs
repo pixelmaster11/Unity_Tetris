@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enums;
+using UnityEngine.Experimental.Rendering.Universal;
+
 
 /// <summary>
 /// Class is responsible to create a tetromino sprite pool
@@ -24,8 +26,7 @@ public class TetrominoSpritePool
     //Transform to parent all the pooled sprites
     private Transform poolParent;
 
-    
-  
+   
 
     //Initialize
     public TetrominoSpritePool(List<Tetromino> _tetrominos, int _amount, Transform _parent)
@@ -33,6 +34,7 @@ public class TetrominoSpritePool
         tetrominos = _tetrominos;
         amount = _amount;
         poolParent = _parent;
+        
     }
   
     /// <summary>
@@ -177,8 +179,18 @@ public class TetrominoSpritePool
     {
         GameObject go = new GameObject(tetrominos[ID].GetTetrominoName());
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+       
         sr.sprite = tetrominos[ID].GetTetrominoOriginalSprite();
         sr.color = tetrominos[ID].GetTetrominoColor();
+
+        /*Light2D light2D = go.AddComponent<Light2D>();
+        light2D.lightType = Light2D.LightType.Point;
+        light2D.color = tetrominos[ID].GetGhostColor();
+        light2D.pointLightInnerRadius = 1;
+        light2D.pointLightOuterRadius = 2;
+        light2D.intensity = 0.3f;*/
+        
+        
         sr.gameObject.SetActive(false);
         sr.transform.parent = poolParent;
         return sr;
@@ -196,6 +208,15 @@ public class TetrominoSpritePool
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = tetrominos[ID].GetGhostSprite();
         sr.color = tetrominos[ID].GetGhostColor();
+
+        
+        /*Light2D light2D = go.AddComponent<Light2D>();
+        light2D.lightType = Light2D.LightType.Point;
+        light2D.color = tetrominos[ID].GetGhostColor();
+        light2D.pointLightInnerRadius = 1;
+        light2D.pointLightOuterRadius = 2;*/
+        
+        
         sr.gameObject.SetActive(false);
         sr.transform.parent = poolParent;
         return sr;

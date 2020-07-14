@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Enums;
 using Configs;
+using UnityEngine.Experimental.Rendering.Universal;
 
 /// <summary>
 /// Base Tetromino class
@@ -75,6 +76,7 @@ public class Tetromino : MonoBehaviour
 
         isSpawned = true;
         
+
     }
 
     //Called when tetromino is deactivated
@@ -113,7 +115,7 @@ public class Tetromino : MonoBehaviour
         if(!tetrominoSprites.Contains(sr))
         {
             tetrominoSprites.Add(sr);
-        }
+        }    
         
     }
 

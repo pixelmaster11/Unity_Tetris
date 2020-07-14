@@ -36,6 +36,7 @@ namespace BoardSystem
             boardStates.Add(BoardStateType.AutoFallState, new AutoFallBoardState(board, this, tetrominoManager)); 
             boardStates.Add(BoardStateType.LockingState, new LockingBoardState(board, this));
             boardStates.Add(BoardStateType.LineCompletionState, new LineCompletionBoardState(board, this));               
+            boardStates.Add(BoardStateType.GameOverState, new GameOverBoardState(board, this));  
 
             InitializeBoardState(initStateType);
         }

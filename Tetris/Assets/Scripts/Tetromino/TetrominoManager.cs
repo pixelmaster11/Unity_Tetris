@@ -5,6 +5,7 @@ using Enums;
 using TetrominoSpawnSystem;
 using Configs;
 
+
 /// <summary>
 /// Manager class used to handle Tetrominos and Tetromino Sprites
 /// Spawning, Disabling / Enabling 
@@ -21,6 +22,7 @@ public class TetrominoManager : Configurable
     //Cache spawn config file
     private TetrominoSpawnConfig spawnConfig;
 
+    
 
     public TetrominoManager(BaseConfig _config) : base (_config)
     {   
@@ -78,6 +80,7 @@ public class TetrominoManager : Configurable
         
         T.gameObject.SetActive(true);
         T.transform.parent = null;
+        
         return T;
     }
 
@@ -102,6 +105,7 @@ public class TetrominoManager : Configurable
                 T.OnDespawn();
                 T.gameObject.SetActive(false);      
                 T.transform.parent = tetrominoPoolParent;
+
             }
         }
     

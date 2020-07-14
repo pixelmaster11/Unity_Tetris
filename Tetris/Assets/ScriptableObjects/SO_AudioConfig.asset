@@ -18,3 +18,8 @@ MonoBehaviour:
   MoveSfx: {fileID: 8300000, guid: 4bd61366d6f628e429a9fa690f93a775, type: 3}
   SnapSfx: {fileID: 8300000, guid: b13c651b67c392148bdb8f8bcc459f54, type: 3}
   LineClearSfx: {fileID: 8300000, guid: f7e86c8e2e5b22242949719fe15054eb, type: 3}
+  BGPitchIncrement: 0.02
+  MoveSfxVolumeScale: 0.2
+  HoldSfxVolumeScale: 1
+  RotateSfxVolumeScale: 0.5
+  SnapSfxVolumeScale: 0.3

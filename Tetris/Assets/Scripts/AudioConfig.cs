@@ -19,6 +19,11 @@ namespace Configs
         public AudioClip SnapSfx;
         public AudioClip LineClearSfx;
 
+        public float BGPitchIncrement = 0.01f;
+        public float MoveSfxVolumeScale = 0.2f;
+        public float HoldSfxVolumeScale = 1f;
+        public float RotateSfxVolumeScale = 0.5f;
+        public float SnapSfxVolumeScale = 0.3f;
     }
 
 

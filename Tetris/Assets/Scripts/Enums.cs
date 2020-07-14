@@ -29,7 +29,8 @@ namespace Enums
         InitState = 0,
         AutoFallState,
         LockingState,
-        LineCompletionState
+        LineCompletionState,
+        GameOverState
     }
 
 
@@ -51,6 +52,12 @@ namespace Enums
         Sega,
         Arika,
         Super
+    }
+
+    public enum HoldType
+    {
+        Unlimited = 0,
+        Once
     }
 
 }
