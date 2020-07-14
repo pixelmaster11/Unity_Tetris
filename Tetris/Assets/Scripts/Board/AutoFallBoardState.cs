@@ -58,6 +58,8 @@ namespace BoardSystem
            
         }
 
+#region State Methods
+
         //Subscribe to Input Command Events
         public override void Entry()
         {        
@@ -68,7 +70,7 @@ namespace BoardSystem
             EventManager.HoldCommandEvent += HoldIssued;
 
             //Disable any previously active tetrominoes
-            DisableTetromino();
+            boardRenderer.DisableTetromino();
 
             //Get a new tetromino
             GetTetromino();
@@ -96,9 +98,49 @@ namespace BoardSystem
             AutoFall();      
         }
 
-        /// <summary>
-        /// Set proper Rotation algorithm based on the chosen configuration
-        /// </summary>
+#endregion //State Methods
+
+         //Make pieces fall automatically
+        private void AutoFall()
+        {
+
+            //Wait for desired time
+            if (timer <= fallTime)
+            {
+                //TUT: EXPLAIN TIME.DELTA TIME IMPORTANCE
+                timer += Time.deltaTime;
+            }
+
+            else
+            {
+                //check if piece can fit one step down then make it auto fall down
+                if (CanMove(0, -1) )
+                {
+                    board.currentPosY -= 1;
+                    UpdateBoard();
+
+                    //Raise Move Success event
+                    if(EventManager.MoveSuccessEvent != null)
+                    {
+                        EventManager.MoveSuccessEvent();
+                    }
+           
+                }
+
+                //If it cannot stop and lock the piece on board
+                else
+                {                          
+                    LockPiece();
+                }
+
+            
+                timer = 0;
+            }
+
+        }
+
+
+        //Set proper Rotation algorithm based on the chosen configuration
         private void SetRotation()
         {
             switch(boardConfig.rotationType)
@@ -117,6 +159,10 @@ namespace BoardSystem
 
             }
         }
+
+
+
+#region Input Commands
 
         /// <summary>
         /// Subscribed for Move Command
@@ -162,9 +208,8 @@ namespace BoardSystem
             }
         }
 
-        /// <summary>
-        /// Subscribed to Snap Command
-        /// </summary>
+      
+        //Subscribed to Snap Command
         private void SnapIssued()
         {   
             //Disable previous ghost sprites then snap piece on the ghost
@@ -175,9 +220,7 @@ namespace BoardSystem
         }
 
 
-        /// <summary>
-        /// Subscribed to Hold Command
-        /// </summary>
+        //Subscribed to Hold Command
         private void HoldIssued()
         {   
 
@@ -210,22 +253,9 @@ namespace BoardSystem
             
         }
 
-        /// <summary>
-        /// Update the board if piece is moved or rotated
-        /// </summary>
-        private void UpdateBoard()
-        {
-            //Disables any previous picece sprites
-            boardRenderer.DisplayBoard();
+#endregion //Input Commands
 
-            //Display sprites at new positions
-            boardRenderer.DisplayPiece(board.currentPosX, board.currentPosY);
-
-            //Display new ghost 
-            Ghost();
-        }
-        
-        
+#region Board Renders
         //Gets the tetromino from pool
         private void GetTetromino(bool isHoldedPiece = false)
         {
@@ -272,10 +302,43 @@ namespace BoardSystem
 
         }
 
+        // Update the board if piece is moved or rotated
+        private void UpdateBoard()
+        {
+            //Disables any previous picece sprites
+            boardRenderer.DisplayBoard();
 
-        /// <summary>
-        /// Swaps the current and hold pieces
-        /// </summary>
+            //Display sprites at new positions
+            boardRenderer.DisplayPiece(board.currentPosX, board.currentPosY);
+
+            //Display new ghost 
+            Ghost();
+        }
+        
+         //DisplayGhost Piece
+        private void Ghost()
+        {      
+            int rd = 1;
+
+            while(CanMove(0, -rd))
+            {        
+                rd ++;        
+            }
+
+            if(rd > 1)
+            {
+                ghostPosX =  board.currentPosX;
+                ghostPosY =  board.currentPosY + 1 - rd;
+                boardRenderer.DisplayPiece(ghostPosX, ghostPosY, true);
+            }
+        
+                
+        }
+
+#endregion //Board Renders
+
+#region Input Executions
+        //Swaps the current and hold pieces
         private void SwapHoldPiece()
         {
             Tetromino temp = holdPiece;
@@ -300,122 +363,17 @@ namespace BoardSystem
         }
 
 
-       /* /// <summary>
-        /// This function displays only the locked Tetromino Sprites and removes any not locked Tetromino Sprites
-        /// </summary>
-        private void DisplayBoard()
-        {
-            for (int y = 0; y < boardConfig.height; y++)
-            {
-                for (int x = 0; x < boardConfig.width; x++)
-                {
-                
-                    //Empty Space and to disable previous tetromino sprites before tetromino is locked
-                    if (board.logicalBoard[x, y] == BoardConfig.EMPTY_SPACE)
-                    {   
-                    
-                        //If there is a tetromino sprite or ghost sprite and it is not locked. Remove it
-                        if(board.graphicalBoard[x, y] != null && board.graphicalBoard[x,y].gameObject.activeInHierarchy)
-                        {   
-                            
-                            SpriteRenderer sr = board.graphicalBoard[x, y];
-                            board.graphicalBoard[x,y] = null;
-                            DisableTetrominoSprite(sr);
+        //Snap the tetromino to its ghost
+        private void SnapToGhost()
+        {   
 
-                                                
-                        }                  
-                        
-                    }
-
-                }
-            }
-        }
-
-
-        //Displays or locks pieces on board
-        private void DisplayPiece(int currPosX, int currPosY, bool isGhost = false)
-        {
+            board.currentPosX = ghostPosX;
+            board.currentPosY = ghostPosY;
+            boardRenderer.DisplayPiece(ghostPosX, ghostPosY);
+    
+            //TODO: Option to lock immidiately or give 1 extra move
+            LockPiece();
             
-        
-        //GEtLength(0) = Rows / Height
-            for (int x = 0; x <  board.currPiece.GetLength(1); x++)
-            {
-                for (int y = 0; y <  board.currPiece.GetLength(0); y++)
-                {       
-                        
-                        //Piece position on board
-                        //TUT: EXPLAIN THIS
-                        int boardX = x + currPosX;//currentPosX; 
-                        int boardY = y + currPosY; //currentPosY; 
-
-                    //Check if inside boundaries, otherwise don't do anything
-                    //TUT: EXPLAIN WHAT HAPPENS IF OUTSIDE BOUNDARY
-                    //wE SIMPLY DO NOT CARE
-                        if (boardX > 0 && boardX < (boardConfig.width - 1))
-                        {
-                            if (boardY > 0 && boardY < boardConfig.height)
-                            {
-                                //If its a tetromino position from tetromino matrix
-                                //TUT: IMPORTANCE OF ISLOCKED
-                                //SHOW USING COROUTINES THAT THE LOCKED PIECES DEOS NOT GET WIPED OUT AS IT IS DISPLAYED  CONSTANTLY USING THIS FUNCTION
-                                //WE ONLY NEED TO DISPLAY THE PIECE GRAPHICALLY TILL ITS LOCKED LOGICALLY
-                                //ONCE ITS LOGICALLY LOCKED THE BOARD WILL DISPLAY THE PIECE
-                                if (board.currPiece[y,x] == 1 && board.graphicalBoard[boardX, boardY] == null)  //&& !isLocked)
-                                {    
-                                                        
-                                    
-
-                                    SpriteRenderer currPieceSprite;
-
-                                
-                                    //Get the sprite associated with current Tetromino piece
-                                    currPieceSprite = tetrominoManager.GetTetrominoSprite(board.tetromino.GetTetrominoID(), isGhost);
-
-                                    
-                                    currPieceSprite.gameObject.transform.position = new Vector2(boardX + boardX * boardConfig.offX,
-                                                                                                boardY + boardY * boardConfig.offY);
-
-                                    currPieceSprite.gameObject.SetActive(true);
-
-                                    currPieceSprite.transform.parent =  board.tetromino.transform;
-                                    
-                                    board.tetromino.SetSprite(currPieceSprite);
-
-                                    board.graphicalBoard[boardX, boardY] = currPieceSprite;
-
-                                
-                        
-                                                            
-                                    
-                                }
-
-
-                            
-                            }
-                        }
-                                                            
-                }
-            }
-        }*/
-
-
-        //DisplayGhost Piece
-        private void Ghost()
-        {      
-            int rd = 1;
-            while(CanMove(0, -rd))
-            {        
-                rd ++;        
-            }
-
-            if(rd > 1)
-            {
-                ghostPosX =  board.currentPosX;
-                ghostPosY =  board.currentPosY + 1 - rd;
-                boardRenderer.DisplayPiece(ghostPosX, ghostPosY, true);
-            }
-        
-                
         }
 
 
@@ -459,24 +417,7 @@ namespace BoardSystem
             return true;
         }
 
-
-        /// <summary>
-        /// Snap the tetromino to its ghost
-        /// </summary>
-        private void SnapToGhost()
-        {   
-
-            board.currentPosX = ghostPosX;
-            board.currentPosY = ghostPosY;
-            boardRenderer.DisplayPiece(ghostPosX, ghostPosY);
-    
-            //TODO: Option to lock immidiately or give 1 extra move
-            LockPiece();
-            
-        }
-
-        
-    //Can we fit our piece after rotating?
+        //Can we fit our piece after rotating?
         private bool CanRotate(int rotDirection)
         {   
             
@@ -524,58 +465,9 @@ namespace BoardSystem
         }
 
 
-        //Make pieces fall automatically
-        private void AutoFall()
-        {
+#endregion // Input Executions
 
-            //Wait for desired time
-            if (timer <= fallTime)
-            {
-                //TUT: EXPLAIN TIME.DELTA TIME IMPORTANCE
-                timer += Time.deltaTime;
-            }
-
-            else
-            {
-                //check if piece can fit one step down then make it auto fall down
-                if (CanMove(0, -1) )
-                {
-                    board.currentPosY -= 1;
-                    UpdateBoard();
-
-                    //Raise Move Success event
-                    if(EventManager.MoveSuccessEvent != null)
-                    {
-                        EventManager.MoveSuccessEvent();
-                    }
-           
-                }
-
-                //If it cannot stop and lock the piece on board
-                else
-                {                          
-                    LockPiece();
-                }
-
-            
-                timer = 0;
-            }
-
-        }
-
-        //Disables the tetromino sprite or ghost sprite 
-        //And sends it back to the pool
-        private void DisableTetrominoSprite(SpriteRenderer sr)
-        {
-            tetrominoManager.DisableTetrominoSprite(sr);
-        }
-
-        //Disables the active tetromino
-        private void DisableTetromino()
-        {
-            tetrominoManager.DisableTetromino(board.tetromino);
-        }
-
+       
         //Change to Lock state
         private void LockPiece()
         {   

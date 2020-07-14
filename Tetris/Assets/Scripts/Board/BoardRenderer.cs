@@ -6,15 +6,18 @@ using Configs;
 namespace BoardSystem
 {
 
-
+    /// <summary>
+    /// Class responsible for rendering stuff on Board
+    /// </summary>
     public class BoardRenderer
     {
         
+        //Rerferences
         private Board board;
         private BoardConfig boardConfig;
         private TetrominoManager tetrominoManager;
 
-
+        //Init
         public BoardRenderer(Board _board, TetrominoManager _tMan)
         {
             board = _board;
@@ -122,6 +125,12 @@ namespace BoardSystem
         private void DisableTetrominoSprite(SpriteRenderer sr)
         {
             tetrominoManager.DisableTetrominoSprite(sr);
+        }
+
+        //Disables the active tetromino
+        public void DisableTetromino()
+        {
+            tetrominoManager.DisableTetromino(board.tetromino);
         }
 
 
