@@ -30,9 +30,6 @@ namespace Configs
         //Code to be used for Boundary
         public const int BOUNDARY = 101;
 
-        //Type of rotation to be used to rotate tetrominos
-        public RotateType rotationType;
-
         //Time after which tetrominos automatically fall
         public float fallTime = 1f;
 
@@ -42,8 +39,14 @@ namespace Configs
         //Number of pieces after which falltime will be decreased
         public int fallPieces = 10;
 
+        //Type of rotation to be used to rotate tetrominos
+        public RotateType rotationType;
+
         //Type of hold method to be used
         public HoldType holdType;
+
+        //Type of line clear to be used to clear lines
+        public LineClearType lineClearType;
 
     }
 }

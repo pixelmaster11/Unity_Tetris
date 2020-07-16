@@ -45,11 +45,8 @@ namespace BoardSystem
             //Cache tetromino manager reference
             tetrominoManager = _tMan;
 
-            //Set fall timers
-            fallTime = boardConfig.fallTime;
-            fallMultiplier = boardConfig.fallMultiplier;
-            fallPieces = boardConfig.fallPieces;
-            lockedPieces = 0;
+            //Set Settings
+            SetSettings();
 
             //Set proper rotation method
             SetRotation();
@@ -68,6 +65,7 @@ namespace BoardSystem
             EventManager.RotateEvent += RotateIssued;
             EventManager.SnapEvent += SnapIssued;
             EventManager.HoldCommandEvent += HoldIssued;
+            EventManager.GameOverEvent += OnGameOver;
 
             //Disable any previously active tetrominoes
             boardRenderer.DisableTetromino();
@@ -161,6 +159,22 @@ namespace BoardSystem
         }
 
 
+        private void OnGameOver()
+        {
+            
+            SetSettings();
+            EventManager.GameOverEvent -= OnGameOver;
+        }
+
+
+        private void SetSettings()
+        {
+            //Set fall timers
+            fallTime = boardConfig.fallTime;
+            fallMultiplier = boardConfig.fallMultiplier;
+            fallPieces = boardConfig.fallPieces;
+            lockedPieces = 0;
+        }
 
 #region Input Commands
 
@@ -370,7 +384,14 @@ namespace BoardSystem
             board.currentPosX = ghostPosX;
             board.currentPosY = ghostPosY;
             boardRenderer.DisplayPiece(ghostPosX, ghostPosY);
-    
+
+
+            if(EventManager.SnapParticlesEvent != null)
+            {
+                
+                EventManager.SnapParticlesEvent(ghostPosX, ghostPosY);
+            }
+
             //TODO: Option to lock immidiately or give 1 extra move
             LockPiece();
             
@@ -380,6 +401,8 @@ namespace BoardSystem
         //Can we move our piece 
         private bool CanMove(int xDir, int yDir)
         {
+            
+            
             //next piece positions to be moved to
             int nextPosX =  board.currentPosX + xDir;
             int nextPosY =  board.currentPosY + yDir;

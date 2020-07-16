@@ -29,13 +29,22 @@ public class GamePlayManager : MonoBehaviour
     //Reference to Config file
     [SerializeField]
     private ConfigsReferences configsReferences;
-
-
     
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
+    }
+
+    private void OnEnable()
+    {
+        EventManager.GameOverRestartEvent += Restart;
+        Restart();
+    }
+
+    private void OnDisable()
+    {
+        EventManager.GameOverRestartEvent -= Restart;
     }
 
 
@@ -77,6 +86,12 @@ public class GamePlayManager : MonoBehaviour
     }
 
 
-  
+    
+    void Restart()
+    {
+        tetrominoManager.Enable();
+        audioManager.Enable();
+        boardStateController.Enable(BoardStateType.InitState);
+    }
 
 }

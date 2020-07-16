@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
         EventManager.SnapSuccessEvent += PlaySnapSfx;
 
         EventManager.FallTimeDecreaseEvent += IncreaseBGPitch;
+        EventManager.GameOverEvent += OnGameOver;
     }
 
      //Unsubscribe to Events
@@ -34,14 +35,22 @@ public class AudioManager : MonoBehaviour
         EventManager.SnapSuccessEvent -= PlaySnapSfx;
 
         EventManager.FallTimeDecreaseEvent -= IncreaseBGPitch;
+        EventManager.GameOverEvent -= OnGameOver;
     }
 
+
+    public void Enable()
+    {
+        PlayBG();
+    }
+    
     //Sets the preview factory
     public void SetSpawnConfig(BaseConfig _config)
     {   
         config = (AudioConfig) _config;
-        PlayBG();   
+          
     }
+
 
 
     private void IncreaseBGPitch(float time)
@@ -97,6 +106,12 @@ public class AudioManager : MonoBehaviour
         bgSource.clip = config.BgClip;
         bgSource.loop = true;
         bgSource.Play();
+    }
+
+
+    private void OnGameOver()
+    {
+        bgSource.Stop();
     }
 
 

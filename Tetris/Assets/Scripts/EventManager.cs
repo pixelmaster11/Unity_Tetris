@@ -66,6 +66,16 @@ public static class EventManager
     public static CommandSuccess RotateSuccessEvent;
     public static CommandSuccess SnapSuccessEvent;
 
+    public delegate void SnapParticles(int posX, int posY);
+    public static SnapParticles SnapParticlesEvent;
+
     public delegate void FallTime(float fallTime);
     public static FallTime FallTimeDecreaseEvent;
+
+
+    public delegate void GameOver();
+    public static GameOver GameOverEvent;
+    public static GameOver GameOverRestartEvent;
+    public static GameOver GameOverQuitEvent;
+
 }

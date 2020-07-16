@@ -13,21 +13,26 @@ namespace BoardSystem
     /// </summary>
     public class InitBoardState : BoardState
     {   
-        
+        private bool initComplete;
+
         public InitBoardState(Board _board, BoardStateController _controller) : base(_board, _controller)
         {
             
         }
 
         public override void Entry()
-        {         
-            InitializeBoard();       
+        {   
+            if(!initComplete)
+            {
+                InitializeBoard();     
+            }     
+              
             stateController.ChangeState(BoardStateType.AutoFallState);
         }
 
         public override void Exit()
         {
-        
+            initComplete = true;
         }
 
         public override void StateUpdate()

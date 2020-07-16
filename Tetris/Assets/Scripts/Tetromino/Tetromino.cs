@@ -237,6 +237,6 @@ public class Tetromino : MonoBehaviour
         return tetrominoConfig.GhostColor;
     }
 
-   
+  
   
 }

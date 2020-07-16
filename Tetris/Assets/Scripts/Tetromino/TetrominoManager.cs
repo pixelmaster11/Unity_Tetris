@@ -22,7 +22,9 @@ public class TetrominoManager : Configurable
     //Cache spawn config file
     private TetrominoSpawnConfig spawnConfig;
 
-    
+
+    private List<SpriteRenderer> activeSprites;
+    private Tetromino activeTetromino;
 
     public TetrominoManager(BaseConfig _config) : base (_config)
     {   
@@ -32,7 +34,14 @@ public class TetrominoManager : Configurable
         tetrominoSpritePoolParent = new GameObject("TetrominoSpritePool").transform;
         tetrominoSpawner = new TetrominoSpawner(spawnConfig, tetrominoPoolParent, tetrominoSpritePoolParent);
         
+        activeSprites = new List<SpriteRenderer>();
         CreatePool();
+    }
+
+
+    public void Enable()
+    {
+        tetrominoSpawner.Enable();
     }
 
     /// <summary>
@@ -52,6 +61,7 @@ public class TetrominoManager : Configurable
     {
         SpriteRenderer sr = tetrominoSpawner.GetTetrominoSprite(ID, isGhost);
         sr.sortingOrder = 1;
+        activeSprites.Add(sr);
         return sr;
     }
 
@@ -66,6 +76,7 @@ public class TetrominoManager : Configurable
     {
         SpriteRenderer sr = tetrominoSpawner.GetTetrominoSprite(type, isGhost);
         sr.sortingOrder = 1;
+        activeSprites.Add(sr);
         return sr;
     }
 
@@ -77,7 +88,7 @@ public class TetrominoManager : Configurable
     public Tetromino GetTetromino()
     {
         Tetromino T = tetrominoSpawner.GetTetromino();
-        
+        activeTetromino = T;
         T.gameObject.SetActive(true);
         T.transform.parent = null;
         
@@ -120,6 +131,32 @@ public class TetrominoManager : Configurable
     {
         sr.gameObject.SetActive(false);
         sr.transform.parent = tetrominoSpritePoolParent;
+
+        if(activeSprites.Contains(sr))
+        {
+            activeSprites.Remove(sr);
+        }
+    }
+
+
+
+    public void OnGameOver()
+    {
+        foreach(SpriteRenderer sr in activeSprites)
+        {
+            sr.gameObject.SetActive(false);
+            sr.transform.parent = tetrominoSpritePoolParent;
+        }
+
+        activeSprites.Clear();
+
+        if(activeTetromino != null)
+        {
+            DisableTetromino(activeTetromino);
+            activeTetromino = null;
+        }
+
+        tetrominoSpawner.OnGameOver();
     }
 
 

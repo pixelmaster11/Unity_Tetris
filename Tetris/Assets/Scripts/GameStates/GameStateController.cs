@@ -2,89 +2,76 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Enums;
-using Configs;
 
-namespace BoardSystem
+public class GameStateController : MonoBehaviour
 {
-
-    /// <summary>
-    /// This class is a state machine for the board states.!--
-    /// Responsible for controlling board states, tracking current and previous states,
-    /// State transitions and Update
-    /// </summary>
-    public class BoardStateController 
-    {
         //Current and previous states
-        private BoardState currentState;
-        private BoardState previousState;
+        private GameState currentState;
+        private GameState previousState;
 
         //Current and previous state types
-        private BoardStateType currentStateType;
-        private BoardStateType previousStateType;
+        private GameStateType currentStateType;
+        private GameStateType previousStateType;
 
         //Dictionary to store all states
-        private Dictionary<BoardStateType, BoardState> boardStates;
+        private Dictionary<GameStateType, GameState> gameStates;
         private float timer = 0;
 
+        [SerializeField]
+        private GameState menuState;
 
-        //On Create
-        public BoardStateController(Board board, TetrominoManager tetrominoManager, BoardStateType initStateType)
-        {   
-            //Fill up the dictionary by creating and adding all board states
-            boardStates = new Dictionary<BoardStateType, BoardState>();
-            boardStates.Add(BoardStateType.InitState, new InitBoardState(board, this));
-            boardStates.Add(BoardStateType.AutoFallState, new AutoFallBoardState(board, this, tetrominoManager)); 
-            boardStates.Add(BoardStateType.LockingState, new LockingBoardState(board, this));
-            boardStates.Add(BoardStateType.LineCompletionState, new LineCompletionBoardState(board, this));               
-            boardStates.Add(BoardStateType.GameOverState, new GameOverBoardState(board, this, tetrominoManager));  
+        [SerializeField]
+        private GameState gameplayState;
 
-            //InitializeBoardState(initStateType);
+        private void Awake()
+        {
+            Init();
         }
 
+        //On Create
+        public void Init()
+        {   
+            //Fill up the dictionary by creating and adding all game states
+            gameStates = new Dictionary<GameStateType, GameState>();
+            gameStates.Add(GameStateType.MenuState, menuState);
+            gameStates.Add(GameStateType.GamePlayState, gameplayState);
 
-        public void Enable(BoardStateType initStateType)
-        {
-            InitializeBoardState(initStateType);
+            InitializeGameState();
         }
 
         /// <summary>
         /// Assigns a start state to the board
         /// </summary>
         /// <param name="initStateType">The start state of the board</param>
-        public void InitializeBoardState(BoardStateType initStateType)
+        public void InitializeGameState()
         {
-            BoardState initState;
-
-            if(boardStates.TryGetValue(initStateType, out initState))
+           
+            if(menuState != null)
             {
-                currentState = initState;
-                
-                LogState("Entry");
-                currentState.Entry();
-                
+                currentState = menuState;
             }
+    
+                
+            LogState("Entry");
+            currentState.Entry();
+                
 
-            else
-            {
-                Debug.LogError(initStateType + " is not a valid board state type");
-            }
-        
         }
 
         /// <summary>
         /// Change from current state to new state
         /// </summary>
         /// <param name="newStateType">New state to transition to</param>
-        public void ChangeState(BoardStateType newStateType)
+        public void ChangeState(GameStateType newStateType)
         {
-            BoardState newState;
+            GameState newState;
 
             if(currentStateType == newStateType)
             {
                 return;
             }
 
-            if(boardStates.TryGetValue(newStateType, out newState))
+            if(gameStates.TryGetValue(newStateType, out newState))
             {
                 //check null for initialization
                 if(currentState != null)
@@ -171,6 +158,5 @@ namespace BoardSystem
             DebugUtils.LogState(currentState, message);
         }
 
-    }
-
 }
+

@@ -33,6 +33,12 @@ namespace Enums
         GameOverState
     }
 
+    public enum GameStateType
+    {
+        MenuState = 0,
+        GamePlayState,
+    }
+
 
     public enum ConfigType
     {
@@ -58,6 +64,12 @@ namespace Enums
     {
         Unlimited = 0,
         Once
+    }
+
+    public enum LineClearType
+    {
+        Naive = 0,
+        Sticky
     }
 
 }

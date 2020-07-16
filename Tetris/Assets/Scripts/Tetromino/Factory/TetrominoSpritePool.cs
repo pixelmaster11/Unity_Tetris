@@ -183,12 +183,13 @@ public class TetrominoSpritePool
         sr.sprite = tetrominos[ID].GetTetrominoOriginalSprite();
         sr.color = tetrominos[ID].GetTetrominoColor();
 
-        /*Light2D light2D = go.AddComponent<Light2D>();
+
+        Light2D light2D = go.AddComponent<Light2D>();
         light2D.lightType = Light2D.LightType.Point;
         light2D.color = tetrominos[ID].GetGhostColor();
         light2D.pointLightInnerRadius = 1;
         light2D.pointLightOuterRadius = 2;
-        light2D.intensity = 0.3f;*/
+        light2D.intensity = 1f;
         
         
         sr.gameObject.SetActive(false);
@@ -210,12 +211,12 @@ public class TetrominoSpritePool
         sr.color = tetrominos[ID].GetGhostColor();
 
         
-        /*Light2D light2D = go.AddComponent<Light2D>();
+        Light2D light2D = go.AddComponent<Light2D>();
         light2D.lightType = Light2D.LightType.Point;
         light2D.color = tetrominos[ID].GetGhostColor();
         light2D.pointLightInnerRadius = 1;
-        light2D.pointLightOuterRadius = 2;*/
-        
+        light2D.pointLightOuterRadius = 2;
+        light2D.intensity = 0.3f;
         
         sr.gameObject.SetActive(false);
         sr.transform.parent = poolParent;

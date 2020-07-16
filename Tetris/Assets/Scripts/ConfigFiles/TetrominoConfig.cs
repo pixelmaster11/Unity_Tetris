@@ -50,7 +50,7 @@ namespace Configs
         [SerializeField]
         protected bool applyColor = true;
 
-
+       
         public Sprite TetrominoSprite
         {
             get
@@ -123,6 +123,8 @@ namespace Configs
             }
         }
 
+
+    
      
 
         /// <summary>

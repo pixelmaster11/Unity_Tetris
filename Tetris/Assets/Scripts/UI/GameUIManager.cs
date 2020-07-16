@@ -65,17 +65,27 @@ public class GameUIManager : MonoBehaviour
 
     private float timer; 
 
+    [Header("Gameover Canvas")]
+    [SerializeField]
+    private Canvas gameOverCanvas;
 
-   
+    [SerializeField]
+    private Button playButton;
+
+    [SerializeField]
+    private Button quitButton;
+
 
     //Subscribe to Events
     private void OnEnable()
     {
         EventManager.TetrominoSpawnEvent += DisplayPreview;
         EventManager.HoldPieceEvent += DisplayHoldPiece;
-
         EventManager.LineCompleteEvent += DisplayLinesCleared;
+        EventManager.GameOverEvent += DisplayGameOverUI;
         
+        playButton.onClick.AddListener(OnRestart);
+        quitButton.onClick.AddListener(OnQuit);
     }
 
     //Unsubscribe to Events
@@ -85,6 +95,10 @@ public class GameUIManager : MonoBehaviour
         EventManager.HoldPieceEvent -= DisplayHoldPiece;
 
         EventManager.LineCompleteEvent -= DisplayLinesCleared;
+        EventManager.GameOverEvent -= DisplayGameOverUI;
+
+        playButton.onClick.RemoveAllListeners();
+        quitButton.onClick.RemoveAllListeners();
     }
 
 
@@ -162,12 +176,9 @@ public class GameUIManager : MonoBehaviour
         for(int i = 0; i < previewTetrominos.Count; i++)
         {
             PreviewTetromino pt = previewTetrominos.ElementAt(i);
-            //previewTetrominos.ElementAt(i).transform.position = previewPositions[i].position;
-            //previewTetrominos.ElementAt(i).transform.position += new Vector3(Mathf.Sin());
-
+    
             pt.transform.position = previewPositions[i].position;
-            pt.transform.position += new Vector3(posXOffsetCurve.Evaluate(pt.RotID ), 
-                                                0, 0);
+            pt.transform.position += new Vector3(posXOffsetCurve.Evaluate(pt.RotID ), 0, 0);
 
             
         }
@@ -238,4 +249,57 @@ public class GameUIManager : MonoBehaviour
     }
     
 
+    private void DisplayGameOverUI()
+    {
+        gameOverCanvas.gameObject.SetActive(true);
+        DisablePreviewTetrominos();
+        DisableHoldTetromino();
+    }
+
+    private void OnRestart()
+    {
+        gameOverCanvas.gameObject.SetActive(false);
+
+        if(EventManager.GameOverRestartEvent != null)
+        {
+            EventManager.GameOverRestartEvent();
+        }
+    }
+
+    private void OnQuit()
+    {
+        gameOverCanvas.gameObject.SetActive(false);
+
+        if(EventManager.GameOverQuitEvent != null)
+        {
+            EventManager.GameOverQuitEvent();
+        }
+    }
+
+
+    private void DisablePreviewTetrominos()
+    {
+        foreach(PreviewTetromino pt in previewTetrominos)
+        {
+            pt.gameObject.SetActive(false);
+            pt.transform.parent = poolTransform;
+
+        }
+
+        previewTetrominos.Clear();
+    }
+
+
+    private void DisableHoldTetromino()
+    {
+        if(holdTetromino != null)
+        {
+            holdTetromino.gameObject.SetActive(false);
+            holdTetromino = null;
+            holdTetromino.transform.parent = poolTransform;
+        }
+      
+    }
+
+ 
 }

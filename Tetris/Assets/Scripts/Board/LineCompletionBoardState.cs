@@ -14,18 +14,19 @@ namespace BoardSystem
     public class LineCompletionBoardState : BoardState
     {
 
-        //Keep track of lines complete
-        private int linesCompleted;
+        //Ref to line clear method
+        private ILineClearStrategy lineClearStrategy;
 
+        //Init and set line clear method
         public LineCompletionBoardState(Board _board, BoardStateController _controller) : base(_board, _controller)
         {
-            linesCompleted = 0;
+            SetLineClearMethod();
         }
 
         public override void Entry()
         {
         
-            CheckLineCompletion();
+            lineClearStrategy.ClearLine();
             stateController.ChangeState(BoardStateType.AutoFallState);
         }
 
@@ -40,112 +41,21 @@ namespace BoardSystem
         }
 
 
-        /// <summary>
-        /// Brings down lines at given row
-        /// </summary>
-        /// <param name="y"></param>
-        public void DecreaseLine(int y) 
+        //Sets appropriate line clear method
+        private void SetLineClearMethod()
         {
-            for (int x = 1; x < boardConfig.width - 1; x++) 
-            {      
-                // Move one towards bottom
-                board.logicalBoard[x, y-1] = board.logicalBoard[x, y];
-                board.graphicalBoard[x, y-1] = board.graphicalBoard[x , y];
-
-                board.graphicalBoard[x, y] = null;
-
-                // Update Sprite positions
-                if(board.graphicalBoard[x , y - 1] != null)
-                {
-                    board.graphicalBoard[x, y-1].transform.position += new Vector3(0, - (1 + boardConfig.offY), 0);
-                }
-                
-                
-                
-            }
-        }
-
-
-        public void DecreaseLinesAboveOf(int y) 
-        {
-            //For all lines above the completed line bring them down one by one
-            for (int i = y; i < boardConfig.height; ++i)
-                DecreaseLine(i);
-        }
-
-
-        /// <summary>
-        /// Removes all sprites on the given row
-        /// </summary>
-        /// <param name="y">Row number</param>
-        public void RemoveLineAt(int y) 
-        {   
-            //Remove all sprites for the given row except boundary sprites
-            for (int x = 1; x < boardConfig.width - 1; x++) 
+            switch(boardConfig.lineClearType)
             {
-                board.logicalBoard[x, y] = BoardConfig.EMPTY_SPACE;
-                board.graphicalBoard[x,y].gameObject.SetActive(false);
-                board.graphicalBoard[x, y] = null;
-            }
+                case LineClearType.Naive:
+                lineClearStrategy = new NaiveLineClear(board);
+                break;
 
-            
+                default:
+                lineClearStrategy = new NaiveLineClear(board);
+                break;
+            }
         }
 
-        /// <summary>
-        /// Checks whether the line is completed at given row
-        /// </summary>
-        /// <param name="y">Row number</param>
-        /// <returns>True of false if line is complete</returns>
-        public bool IsLineCompleteAt(int y)
-        {   
-            //Ignore index 0 and width - 1 as they represent boundaries
-            //Hence start loop from 1
-            for (int x = 1; x < boardConfig.width - 1; x++)
-            {
-                //If there is any empty space, then line is not completed
-                if (board.logicalBoard[x, y] == BoardConfig.EMPTY_SPACE)
-                {
-                    return false;
-                }
-                
-            }
-                
-            return true;
-        }
-
-        //Line Completion Check
-        public void CheckLineCompletion() 
-        {
-            // For all rows
-            for (int y = 1; y < boardConfig.height; y++) 
-            {   
-                //Check if line is complete 
-                if (IsLineCompleteAt(y)) 
-                {   
-                    
-                    //Increment lines completed
-                    linesCompleted += 1;
-
-                    //Raise Line Complete Event
-                    if(EventManager.LineCompleteEvent != null)
-                    {
-                        EventManager.LineCompleteEvent(linesCompleted);
-                    }
-
-                    //Remove completed line at that row
-                    RemoveLineAt(y);
-
-                    //Bring all rows from above the removed line down
-                    DecreaseLinesAboveOf(y+1);
-
-                    //Decrement the row as we have now brought all rows down due to line removal
-                    y--;
-
-                }
-            }
-                
-            
-        }
     }
 
 }

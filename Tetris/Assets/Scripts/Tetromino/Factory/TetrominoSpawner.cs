@@ -97,6 +97,19 @@ namespace TetrominoSpawnSystem
         }
 
 
+        public void OnGameOver()
+        {
+            spawnQueue.Clear();                 
+        }
+
+        public void Enable()
+        {
+            for(int i = 0; i < config.MaxTetrominosInQueue; i++)
+            {
+                FillSpawnQueue();
+            }
+        }
+
         /// <summary>
         /// Creates a spawn queue with maximum allowed initial pieces 
         /// Also used to display UI for next piece preview
@@ -104,13 +117,7 @@ namespace TetrominoSpawnSystem
         private void CreateSpawnQueue()
         {
             spawnQueue = new Queue<Tetromino>();
-
-            for(int i = 0; i < config.MaxTetrominosInQueue; i++)
-            {
-                FillSpawnQueue();
-            }
-
-            
+            //Enable();        
         }
 
         /// <summary>

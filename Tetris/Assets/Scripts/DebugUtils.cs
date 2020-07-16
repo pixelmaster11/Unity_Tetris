@@ -1,5 +1,5 @@
 ﻿#define DEBUGLOG
-//#define DEBUG_STATES
+#define DEBUG_STATES
 
 using System.Collections;
 using System.Collections.Generic;

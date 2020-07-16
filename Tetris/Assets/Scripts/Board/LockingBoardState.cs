@@ -12,17 +12,18 @@ namespace BoardSystem
     public class LockingBoardState : BoardState
     {
         
+        
+
         public LockingBoardState(Board _board, BoardStateController _controller) : base(_board, _controller)
         {
-        
+            
         }
 
         public override void Entry()
-        {
-        
-            LockPiece();
-            
+        {     
+            LockPiece();  
             stateController.ChangeState(BoardStateType.LineCompletionState);
+            
         }
 
         public override void Exit()
@@ -63,6 +64,7 @@ namespace BoardSystem
                                 if(board.graphicalBoard[boardX, boardY] != null)
                                 {
                                     board.graphicalBoard[boardX, boardY].transform.parent = board.boardTetrominos;
+                                    
                                 }  
                                                 
 
